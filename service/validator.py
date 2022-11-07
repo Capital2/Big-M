@@ -1,5 +1,5 @@
 import re
-def validateInput(input):
+def ValidateUserInput(input):
     '''
     Validate user input, check if the objectif or the constraint is valid 
     '''
@@ -13,7 +13,7 @@ def validateInput(input):
     occurenceOfX =len(re.findall("x|X",strippedInput))
     occurenceOfY = len(re.findall("y|Y",strippedInput))
     occurenceOfZ = len(re.findall("z|Z",strippedInput))
-    
+
     #check if each variable exist once at most
     if(occurenceOfX > 1 or occurenceOfY > 1 or occurenceOfZ > 1):
         return False
