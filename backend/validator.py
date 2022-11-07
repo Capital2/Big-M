@@ -13,7 +13,7 @@ def validateInput(input):
         return True
     
      #match regEx for gain
-    matchGain = re.findall("^(Max|max|Min|min)[Z|z|W|w][=][-]{0,1}[0-9]+[x|X][+|-][0-9]+[y|Y]([+|-][0-9]+[z|Z]){0,1}",strippedInput)
+    matchGain = re.findall("^(Max|max|Min|min)[Z|z|W|w][=][-]{0,1}[0-9]+[x|X][+|-][0-9]+[y|Y]([+|-][0-9]+[z|Z]){0,1}$",strippedInput)
     if(len(matchGain)!=0):
         return True
    
