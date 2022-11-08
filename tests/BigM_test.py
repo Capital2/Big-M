@@ -21,6 +21,10 @@ class TestBigM(unittest.TestCase):
         for t in (self.exampleObjectiveFalse + self.exampleConsFalse):
             tested = bm.BigM.validateUserInput(t)
             self.assertFalse(tested,f"{t} should be false")
+    
+    def test_formatUserInput(self):
+        testcase = (["Max Z = 3x+y","x-2y<=2","3x+5y>=8"], [ [1, 3, 3], [-2, 5, 1], [2, 8, 0], [-1, 1, 1] ])
+        self.assertEqual(bm.BigM.formatUserInput(testcase[0]), testcase[1])
 
 if __name__ == '__main__':
     unittest.main()
