@@ -1,16 +1,10 @@
 import re
-input = "MaX Z = 3X+Y+80z"
 def ValidateUserInput(input):
     '''
     Validate user input, check if the objectif or the constraint is valid 
     '''
     #remove white spaces from the input string
-    strippedInput =""
-    for i in input:
-        if(i !=" "):
-            strippedInput = strippedInput + i
-    
-    strippedInput = strippedInput.lower()
+    strippedInput = re.sub(' +', '', input.lower())
     
     #get occurence of each variable
     occurenceOfX =len(re.findall("[^a-zA-Z]x",strippedInput))
