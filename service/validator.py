@@ -4,12 +4,12 @@ def ValidateUserInput(input):
     Validate user input, check if the objectif or the constraint is valid 
     '''
     #remove white spaces from the input string
-    strippedInput = re.sub(' +', '', input.lower())
-    
+    strippedInput = re.sub(' ','', input.lower())
+
     #get occurence of each variable
-    occurenceOfX =len(re.findall("[^a-zA-Z]x",strippedInput))
+    occurenceOfX =len(re.findall("[^a]x",strippedInput))
     occurenceOfY = len(re.findall("y",strippedInput))
-    occurenceOfZ = len(re.findall("[^a-zA-Z]z",strippedInput))
+    occurenceOfZ = len(re.findall("[^x|^n]z",strippedInput))
 
     #check if each variable exist once at most
     if(occurenceOfX > 1 or occurenceOfY > 1 or occurenceOfZ > 1):
