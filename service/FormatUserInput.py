@@ -61,7 +61,7 @@ def FormatUserInput(userInput):
         """
         nbVar = 0
         found = [False for _ in range(3)]
-        for i in range(len(userInput)):
+        for i in range(1, len(userInput)):
             if 'x' in userInput[i].lower() and not found[0]:
                 nbVar += 1
                 found[0] = True
@@ -73,6 +73,8 @@ def FormatUserInput(userInput):
                 found[2] = True
             if nbVar == 3: # we have all the variables
                 return nbVar
+        if 'z' in userInput[0].split('=')[1].lower() and not found[2]:
+            nbVar += 1
         return nbVar
     
     # sanitize the input by removing all the extra spaces
@@ -109,6 +111,6 @@ def FormatUserInput(userInput):
     return matrix
 
 
-userInput = [" Min  Z = 3x+3y+z", "3x+y-3z >= 20", "x-z > 3"]
+userInput = ["Max Z = 3x+y","x-2y<=2","3x+5y>=8"]
 matrix = FormatUserInput(userInput)
 print(matrix)
