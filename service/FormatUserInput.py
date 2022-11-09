@@ -91,6 +91,8 @@ def FormatUserInput(userInput):
         constraint = formatVars(userInput[i]).split(' ')
         if constraint[-1][0] == '>':
             constraint.append('1') # 1 means greater than
+        elif constraint[-1][0] == '=':
+            constraint.append('0') # 0 means equal to
         else:
             constraint.append('-1') # -1 means less than
         constraint[-2] = formatConstraints(constraint[-2])
@@ -111,6 +113,6 @@ def FormatUserInput(userInput):
     return matrix
 
 
-userInput = ["Max Z = 3x+y","x-2y<=2","3x+5y>=8"]
+userInput = ["Max Z = 3x+y","x-2y<=2","3x+5y=8"]
 matrix = FormatUserInput(userInput)
 print(matrix)
