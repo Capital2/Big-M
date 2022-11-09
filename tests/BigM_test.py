@@ -23,8 +23,13 @@ class TestBigM(unittest.TestCase):
             self.assertFalse(tested,f"{t} should be false")
     
     def test_formatUserInput(self):
-        testcase = (["Max Z = 3x+y","x-2y<=2","3x+5y>=8"], [ [1, 3, 3], [-2, 5, 1], [2, 8, 0], [-1, 1, 1] ])
-        self.assertEqual(bm.BigM.formatUserInput(testcase[0]), testcase[1])
+        testcase1 = (["Max Z = 3x+y","x-2y<=2","3x+5y>=8"], [ [1, 3, 3], [-2, 5, 1], [2, 8, 0], [-1, 1, 1] ])
+        testcase2 = (["Min Z = 3x+y+2z","x-2y-z<=2","3x+5y+50z>=8"], [ [1, 3, 3], [-2, 5, 1], [-1, 50, 2], [2, 8, 0], [-1, 1, -1] ])
+        testcase3 = (["Max Z = 3x+y+2z","x-z=2","5y+50z>=8", "z>=0"], [ [1, 0, 0, 3], [0, 5, 0, 1], [-1, 50, 1, 2], [2, 8, 0, 0], [0, 1, 1, 1] ])
+        self.assertEqual(bm.BigM.formatUserInput(testcase1[0]), testcase1[1])
+        self.assertEqual(bm.BigM.formatUserInput(testcase2[0]), testcase2[1])
+        self.assertEqual(bm.BigM.formatUserInput(testcase3[0]), testcase3[1])
 
+    
 if __name__ == '__main__':
     unittest.main()
