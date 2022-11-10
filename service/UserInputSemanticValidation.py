@@ -1,5 +1,4 @@
 def UserInputSemanticValidation(objectiveFunction, constraint):
-    import re
     """
     Checks whether the input provided by the user is semantically correct or not
     Arguments:
