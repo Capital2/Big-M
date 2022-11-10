@@ -27,7 +27,7 @@ def graph(linProg):
         fig, ax = plt.subplots()
    
         for i in range(len(linProg[0])): 
-        draw2dGraph([row[i] for row in linProg],i)
+            draw2dGraph([row[i] for row in linProg],i)
         
         plt.ylim(0, None)
         ax.set(xlabel='x axe', ylabel='y axe',title='linear program graph')
