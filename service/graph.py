@@ -1,4 +1,4 @@
-
+from string import ascii_lowercase
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -39,7 +39,6 @@ def graph(linProg):
             remove inersection point that are out of the definition domain
         """
         constraintsToRemove = []
-        print(intersectionPoints)
         for intersectionPoint in intersectionPoints:
             for constraint in listOfConstraints:
                 a = constraint[0]
@@ -47,8 +46,7 @@ def graph(linProg):
                 c = constraint[2]
                 x = intersectionPoint[0]
                 y = intersectionPoint[1]
-                if(a*x+b*y>c):
-                    print(intersectionPoint)
+                if(a*x+b*y>c or x < 0 ):
                     constraintsToRemove.append(intersectionPoint)
                     break
         
@@ -65,10 +63,12 @@ def graph(linProg):
         ax.fill_between(xList,yList,color='C1', alpha=0.3,interpolate=True)
     
     def highlightIntersectionPoints(intersectionPoints):
-        for intersectionPoint in intersectionPoints:
+        
+        for intersectionPoint,letter in zip(intersectionPoints,ascii_lowercase):
             x = intersectionPoint[0]
             y = intersectionPoint[1]
             plt.scatter(x, y, color="black",zorder=2) 
+            ax.annotate(letter,[x,y])
     
     def findIntersectionWithOrigin(listOfConstraints):
         for constraint in listOfConstraints:
@@ -115,6 +115,7 @@ def graph(linProg):
         #remove intersection points that are out of the definition domain
         validIntersection(intersectionPoints,listOfConstraints)
 
+        print(intersectionPoints)
         #color the area of definition domain
         highlightArea(intersectionPoints)
 
