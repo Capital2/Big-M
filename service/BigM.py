@@ -1,5 +1,14 @@
 class BigM:
 
+    def drawGraph(iteration: list[str]):
+        """
+        This function draws the problem (polyèdre) from the iteration given 
+        Arguments:
+            iteration: A simplex iteration.
+        Returns:
+            Some type of media or the path to it.
+        """
+
     def validateUserInput(userInput: str) -> bool:
         """
         Checks whether the input provided by the user is well formatted or not
