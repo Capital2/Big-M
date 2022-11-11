@@ -1,4 +1,4 @@
-def UserInputSemanticValidation(objectiveFunction, constraint):
+def validateUserInputSemantic(objectiveFunction, constraint):
     """
     Checks whether the input provided by the user is semantically correct or not
     Arguments:
@@ -18,4 +18,4 @@ def UserInputSemanticValidation(objectiveFunction, constraint):
 
 objF = "Max Z = 3x+y"
 constraint = "3x+y-z <= 3"
-print(UserInputSemanticValidation(objF, constraint)) # False
+print(validateUserInputSemantic(objF, constraint)) # False
