@@ -1,5 +1,24 @@
-def FormatUserInput(userInput):
-    import re
+import re
+
+def validateUserInputSemantic(objectiveFunction, constraint):
+    """
+    Checks whether the input provided by the user is semantically correct or not
+    Arguments:
+        objectiveFunction : String
+        constraint : String
+    Returns:
+        Boolean
+    """
+    constraint = constraint.lower()
+    objectiveFunction = objectiveFunction.lower().split("=")[-1]
+    constraintVariables = ['x' in constraint, 'y' in constraint, 'z' in constraint]
+    objectiveFunctionVariables = ['x' in objectiveFunction, 'y' in objectiveFunction, 'z' in objectiveFunction]
+    for i in range(len(constraintVariables)):
+        if constraintVariables[i] and not objectiveFunctionVariables[i]: # If a variable is present in the constraint but not in the objective function
+            return False
+    return True
+
+def formatUserInput(userInput):
     """
     The function takes an array of strings representing the input taken and **validated** from a jupyter user.
     The function returns a matrix.
@@ -112,7 +131,31 @@ def FormatUserInput(userInput):
         matrix[i][-1] = res[i] # add the objective function to the matrix
     return matrix
 
+def validateUserInput(input):
+    '''
+    Validate user input, check if the objectif or the constraint is valid 
+    '''
+    #remove white spaces from the input string
+    strippedInput = re.sub(' ','', input.lower())
 
-userInput = ["Max Z = 3x+y","x-2y<=2","3x+5y=8"]
-matrix = FormatUserInput(userInput)
-print(matrix)
+    print(strippedInput)
+    #get occurence of each variable
+    occurenceOfX =re.sub('(max|min)[a-z]','',strippedInput).count("x")
+    occurenceOfY=re.sub('(max|min)[a-z]','',strippedInput).count("y")
+    occurenceOfZ =re.sub('(max|min)[a-z]','',strippedInput).count("z")
+
+    #check if each variable exist once at most
+    if(occurenceOfX > 1 or occurenceOfY > 1 or occurenceOfZ > 1):
+        return False
+   
+    #match regEx for constraints
+    matchConstraint = re.findall("^[-]{0,1}[0-9]*[x|y|z|]([+|-][0-9]*[x|y|z])*(<|>|<=|>=|=)[0-9]+$",strippedInput)
+    if(len(matchConstraint)!=0):
+        return True
+    
+     #match regEx for gain
+    matchGain = re.findall("^(max|min)[a-zA-Z][=][-]{0,1}[0-9]*[x|y|z][+|-][0-9]*[x|z|y]([+|-][0-9]*[x|y|z]){0,1}$",strippedInput)
+    if(len(matchGain)!=0):
+        return True
+   
+    return False
