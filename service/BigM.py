@@ -1,8 +1,44 @@
 import numpy as np 
 
 class BigM:
+
+    # Big M methods sesction
+
+    def __preconditioner__(self, formattedInput: np.matrix):        
+        artificial_variables = []
+        slack_variables = []
+        for j in range(0, formattedInput.shape[1] -1):            
+            item = formattedInput.item((formattedInput.shape[0] -1, j))
+            if item >= 0:
+                artificial_variables.append(1)
+            else:
+                artificial_variables.append(0)
+
+            if item == 0:
+                slack_variables.append(0)
+            elif item > 0:
+                slack_variables.append(-1)
+            else:
+                slack_variables.append(+1)
+
+        print("Slack variables:" + str(slack_variables))
+        print("Artificial variables:" + str(artificial_variables))
+        
+        preconditioned_matrix = formattedInput.copy()
+        
+        variable_flag_col = []
+        for i in range(0, formattedInput.shape[0]):
+            variable_flag_col.append([0])
+        preconditioned_matrix = np.append(preconditioned_matrix, variable_flag_col, axis=1)
+        print(preconditioned_matrix)
+        
+        
+
+
+        
        
-    def runBigM(formattedInput: np.ndarray) -> np.ndarray:
+    def runBigM(self) -> np.matrix:
+        # formattedInput: np.matrix
         """
         This function solves linear optimisation problems with the Big M method and returns each iteration
         in a seperate matrix.
@@ -12,6 +48,7 @@ class BigM:
             A list of matrices that corresponds to simplex iterations (+ the Big M initial phase of course)
         """
         
-        fake_data = arr = np.array([[1, 2.5, 3.2], [0.4, 5, 6]])
+        fake_data = np.matrix([[2, 1, 1], [1, 2, 1], [4, 6, 0], [2, 0, 0]])
         print(fake_data)
         print(type(fake_data))
+        self.__preconditioner__(fake_data)
