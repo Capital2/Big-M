@@ -36,7 +36,7 @@ def graph(linProg):
     
     def validIntersection(intersectionPoints,listOfConstraints):
         """
-            remove inersection point that are out of the definition domain
+            remove inersection points that are out of the definition domain
         """
         constraintsToRemove = []
         for intersectionPoint in intersectionPoints:
@@ -115,7 +115,6 @@ def graph(linProg):
         #remove intersection points that are out of the definition domain
         validIntersection(intersectionPoints,listOfConstraints)
 
-        print(intersectionPoints)
         #color the area of definition domain
         highlightArea(intersectionPoints)
 
