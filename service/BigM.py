@@ -28,9 +28,52 @@ class BigM:
         
         variable_flag_col = []
         for i in range(0, formattedInput.shape[0]):
-            variable_flag_col.append([0])
+            variable_flag_col.append([-1])
         preconditioned_matrix = np.append(preconditioned_matrix, variable_flag_col, axis=1)
+        
+        print("1st version of the preconditioned matrix:")
         print(preconditioned_matrix)
+
+        new_row = []
+        for j in range(0, preconditioned_matrix.shape[1]):
+            new_row.append(0)
+        
+        
+        # Handling slack variables
+        for k in range(0, len(slack_variables)):
+            slack_variable_existence = False
+            if slack_variables[k] != 0:
+                slack_variable_existence = True
+                new_row[k] = slack_variables[k]
+
+            if k != 0:
+                new_row[k -1] = 0
+            
+            if slack_variable_existence:
+                preconditioned_matrix = np.insert(preconditioned_matrix, preconditioned_matrix.shape[0] -2, new_row, axis=0)
+                preconditioned_matrix.itemset((preconditioned_matrix.shape[0] -1, k), 0)
+        new_row[k] = 0
+
+        # Handling artificial variables
+        new_row[len(new_row) -1] = 1
+        for k in range(0, len(artificial_variables)):
+            artificial_variable_existence = False
+            if artificial_variables[k] != 0:
+                artificial_variable_existence = True
+                new_row[k] = artificial_variables[k]
+
+            if k != 0:
+                new_row[k -1] = 0
+            
+            if artificial_variable_existence:
+                preconditioned_matrix = np.insert(preconditioned_matrix, preconditioned_matrix.shape[0] -2, new_row, axis=0)                
+        
+        print("2sec version of the preconditioned matrix:")
+        print(preconditioned_matrix)
+
+        # Handling the equation
+        
+
         
         
 
