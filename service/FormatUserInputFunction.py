@@ -1,93 +1,80 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1317]:
-
-
-import os
-print('Donner votre systeme sous cette forme : Max=...x+...y : ...x+/-...y</>...; ...')
-dict=input("le systeme :")
-print("Votre dictionnaire est : "+dict)
-os. system("pause")
-
-
-# In[1316]:
-
-
 import numpy as np
-dictionnaire = 'Max=2x+3y : 3x+1y<2 ; 1x-1y>3;'
-dictionnaireMax = ''
-dictionnaireMin = ''
-maximisation=''
-contraintes=''
-if(dictionnaire.find('Max')==0):dictionnaireMax=dictionnaireMax+dictionnaire
-if(dictionnaire.find('Min')==0):dictionnaireMin=dictionnaireMin+dictionnaire
-def FormatUserInputR2(dictionnaireMax , maximisation , contraintes):
+#fonction qui recoit un dictionnaire sous la forme par exemple Max=2x+3y : 3x+1y<2 ; 1x-1y>3; et renvoie une matrice
+def FormatUserInputR2(dictionnaire):
+    #tableau qui va contenir par exemple Max=2x+3y
+    maximisation=''
+    #tableau qui va contenir les contraintes par exemple 3x+1y<2 ; 1x-1y>3;
+    contraintes=''
+    #variable de parcour du dictionnaire pour detecter par exemple Max=2x+3y
     z=0
-    for i,c in enumerate(dictionnaire):
-        if(c==':'):
-            e=i+1
+    #variable qui va contenir le nombre de contraintes
     contr=0
-    for i, c in enumerate(dictionnaireMax):
+    #parcourir le disctionnaire jusqu'a trouver :, ensuite la variable e prend la position du ":"+1 et le tableau maximisation sera rempli de par exemple Max=2x+3y
+    for i, c in enumerate(dictionnaire):
         if(c==':'): 
+            e=i+1
             for j in range (z,i,1) :
-                print(dictionnaireMax[j] , j)
-                maximisation=maximisation + dictionnaireMax[j]
+                maximisation=maximisation + dictionnaire[j]
                 z=z+1
+    #parcourir le dictionnaire jusqu'a touver ; , et si on trouve alors on ajoute +1 au nombres de contraintes , et on parcour le dictionnaire de e jusqu'a la fin de la contrainte en avancant e  
     for i, c in enumerate(dictionnaire):
         if(c==';'): 
             contr=contr+1
             for j in range (e,i+1,1) :
-                print(dictionnaire[j] , j)
                 contraintes=contraintes + dictionnaire[j]
                 e=e+1
-    print('equation de maximisation est : ',maximisation)
-    print('On a',contr,'contraintes, qui sont sont :',contraintes)
+    #creation de notre matrice résultat : numpy matrix initialement rempli de zeros
     mat= np.zeros((4,contr+1))
-    print(mat)
+    #deux variables x et y pour contenir les - en cas de besoins
     x=''
     y=''
+    #traitement de la partie maximisation par exemple Max=2x+3y
+    #parcourir le tableau maximisation qui contient Max=2x+3y, si on arrive au deuxième x de la chaine , on ajoute à x le chiffre derriere le x avec le signe - s'il ya
     for i,c in enumerate(maximisation):
          if(c=='x' and maximisation[i-2]!='M'):
                 if(maximisation[i-2]=='-'):
-                    print('hiiiiii',maximisation[i-2])
                     x=x+'-'
                 x=x+maximisation[i-1]
+    #si on trouve le y , on ajoute a la variable y le chifffre derriere le y avec le signe - s'il ya
          if(c=='y'): 
                 if(maximisation[i-2]=='-'):
-                    print('hiiiiii',maximisation[i-2])
                     y=y+'-'
                 y=y+maximisation[i-1]
+    #on rempli la derniere colone de la matrice identifié par -1 , par x , y , 0 et 1 dans la dernière ligne puisque c'est une maximisation
     mat[[0],[-1]]=x
     mat[[1],[-1]]=y
     mat[[2],[-1]]=0
+    #pour detecter s'il ya le i du mot "Min" , mais par defaut c'est max
     mat[[3],[-1]]=1
-
-    print(mat)
+    for i,c in enumerate(maximisation):
+        if(c=="i"):
+         mat[[3],[-1]]=-1
+    #traitement de la partie contrainte
+    #r est un indice pour parcourir une seul contrainte
     r=0
     p=0
-    
+    #parcours du tableau contraintes
     for i,c in enumerate(contraintes):
         con=''
+        #si on arrive au ; alors la contrainte est terminée
         if(c==';'):           
             p=p+1
-            print('contrainte',p)
             for j in range(r,i,1):
                 con=con+contraintes[j+1];
                 r=r+1
-        print('')
-        print('avant boucle',con)
+        #initialisation des nombres des moins dans la contrainte
         nbmoins=0
+        #Dans le cas de nombre de moins egale à 1 , il faut detecter si c'est derriere le x ou derriere le y
         derrierey=0
         derrierex=0
+        #detection de nombre de moins dans la contrainte
         for p,c in enumerate(con):
             if(c=='-'):
                 nbmoins=nbmoins+1
-                print('le nombre des moins est',nbmoins)
+        #parcours de la contrainte et remplissage de la matrice suivant chaque cas
         for m,c in enumerate(con):
-            
-            print('je suis le caractere ',c)
             contr2=contr
+            #si le nombre des moins dans la contrainte egale à 0
             if(nbmoins==0):    
                 if(c=='x'):
                     mat[[0],[-contr-2+m]]=con[m-1]
@@ -99,17 +86,16 @@ def FormatUserInputR2(dictionnaireMax , maximisation , contraintes):
                 if(c=='>'):
                     mat[[2],[-contr-3+m]]=con[m+1]
                     mat[[3],[-contr-3+m]]=1
+            #si le nombre des moins dans la contrainte egale à 1
             if(nbmoins==1 ):
                 if(c=='x'):
                     if(con[m-2]=='-'):
-                        print('le moins est deriere le x')
                         derrierex=1
                         mat[[0],[-contr-3+m]]=-int(con[m-1])
                     else: mat[[0],[-contr-2+m]]=con[m-1]
                 if(c=='y'):
                     if(con[m-2]=='-'):
                         derrierey=derrierey+1
-                        print('le moins est deriere le y',derrierey)
                         mat[[1],[-contr-2+m]]=-int(con[m-1])
                     else: mat[[1],[-contr-3+m]]=con[m-1]
                 if(c=='<' and derrierey==1):
@@ -124,6 +110,7 @@ def FormatUserInputR2(dictionnaireMax , maximisation , contraintes):
                 if(c=='>'and derrierex==1):
                     mat[[2],[-contr-4+m]]=con[m+1]
                     mat[[3],[-contr-4+m]]=1
+            #si le nombre des moins dans la contrainte egale à 0
             if(nbmoins==2):
                 if(c=='x'):
                     mat[[0],[-contr-3+m]]=-int(con[m-1])
@@ -140,19 +127,9 @@ def FormatUserInputR2(dictionnaireMax , maximisation , contraintes):
     return(mat)
 
 
-# In[1302]:
+dictionnairetest = 'Max=2x+3y : 3x+1y<2 ; 1x-1y>3;'
+FormatUserInputR2(dictionnairetest)
 
-
-FormatUserInputR2(dictionnaire , maximisation , contraintes)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 
