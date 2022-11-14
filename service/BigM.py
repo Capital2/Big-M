@@ -4,6 +4,23 @@ class BigM:
 
     # Big M methods sesction
 
+    def __belog_to__(self, preconditioned_matrix: np.matrix,):
+        pass
+    
+    
+    def __generate_equations__(self, preconditioned_matrix: np.matrix):
+        coef = []
+        x = 0
+        e = 0
+        a = 0
+        for i in range(0, preconditioned_matrix.shape(0)):
+            if(preconditioned_matrix.item(i, preconditioned_matrix.shape(1))) == -1:
+                x+= 1
+                coef.append(f'x{x}')
+            elif (preconditioned_matrix.item(i, preconditioned_matrix.shape(1))) == 0:
+                e+= 1
+                coef.append(f'e{x}')
+
     def __preconditioner__(self, formattedInput: np.matrix):        
         artificial_variables = []
         slack_variables = []
