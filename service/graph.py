@@ -44,24 +44,34 @@ def graph(linProg):
                 a = constraint[0]
                 b = constraint[1]
                 c = constraint[2]
+                upper = constraint[3] 
                 x = intersectionPoint[0]
                 y = intersectionPoint[1]
-                if(a*x+b*y>c or x < 0 ):
-                    constraintsToRemove.append(intersectionPoint)
-                    break
-        
-        for i in constraintsToRemove:
-            intersectionPoints.remove(i)
+                if(upper == 1 or upper == 0):
+                    if(a*x+b*y>c or x < 0 ):
+                        constraintsToRemove.append(intersectionPoint)
+                        break
+                else:
+                     if(a*x+b*y<c or x < 0 ):
+                        constraintsToRemove.append(intersectionPoint)
+                        break
+
+        for constraint in constraintsToRemove:
+            intersectionPoints.remove(constraint)
 
     def highlightArea(intersectionPoints):
 
         intersectionPoints.sort(key=lambda k:(k[0],-k[1]))# sort by x then by y in ASC order
-        
         xList = [row[0] for row in intersectionPoints]#create list of x 
         yList = [row[1] for row in intersectionPoints]#create list of y
+        print(intersectionPoints)
+        if( 0 in xList ):#intersect with x =0
+            ax.fill_between(xList,yList,color='C1',hatch="\\\\", alpha=0.3)
+        else:# definition domain don't cross origin
+            intersectionPoints.sort(key=lambda k:(-k[0],-k[1]),reverse=True)
+            limit = [row[1] for row in intersectionPoints]
+            ax.fill_between(xList,yList,limit,color='C1',hatch="\\\\", alpha=0.3)
 
-        ax.fill_between(xList,yList,color='C1', alpha=0.3,interpolate=True)
-    
     def highlightIntersectionPoints(intersectionPoints):
         
         for intersectionPoint,letter in zip(intersectionPoints,ascii_lowercase):
@@ -128,4 +138,4 @@ def graph(linProg):
         plt.legend()
         plt.show() 
         
-graph([[ 1, 0,3,-3], [ 0, 2, 2,5], [ 4, 12, 18,16], [ 0, 1, 1,1]])
+graph([[ 1, 0,3,-3], [ 0, 2, 2,5], [ 4, 12, 18,16], [ 1, -1,1,1]])
