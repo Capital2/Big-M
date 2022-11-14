@@ -33,14 +33,14 @@ class TestBigM(unittest.TestCase):
         self.assertEqual(InputHandling.formatUserInput(testcase3[0]), testcase3[1])
         self.assertEqual(InputHandling.formatUserInput(testcase4[0]), testcase4[1])
 
-    def test_drawGraph(self):
-        testcase1 = (["Max Z = 3x+y","x-2y<=2","3x+5y>=8"], [ [1, 3, 3], [-2, 5, 1], [2, 8, 0], [-1, 1, 1] ])
-        # A way of testing the draw func, is that we test whether the show function have been
-        # called or not relying on the fact that the show() func is usually called at the end of 
-        # the drawGraph func.
-        with patch("matplotlib.pyplot.show") as show_patch:
-            InputHandling.drawGraph(testcase1[0])
-            show_patch.assert_called()
+    # def test_drawGraph(self):
+    #     testcase1 = (["Max Z = 3x+y","x-2y<=2","3x+5y>=8"], [ [1, 3, 3], [-2, 5, 1], [2, 8, 0], [-1, 1, 1] ])
+    #     # A way of testing the draw func, is that we test whether the show function have been
+    #     # called or not relying on the fact that the show() func is usually called at the end of 
+    #     # the drawGraph func.
+    #     with patch("matplotlib.pyplot.show") as show_patch:
+    #         InputHandling.drawGraph(testcase1[0])
+    #         show_patch.assert_called()
     
 if __name__ == '__main__':
     unittest.main()
