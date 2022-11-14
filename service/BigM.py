@@ -1,4 +1,7 @@
-import numpy as np 
+import numpy as np
+from utilities import Utilities
+import pandas as pd
+
 
 class BigM:
 
@@ -6,26 +9,33 @@ class BigM:
 
     def __belog_to__(self, preconditioned_matrix: np.matrix,):
         pass
-    
-    
-    def __generate_equations__(self, preconditioned_matrix: np.matrix):
-        coef = []
-        x = 0
-        e = 0
-        a = 0
-        for i in range(0, preconditioned_matrix.shape(0)):
-            if(preconditioned_matrix.item(i, preconditioned_matrix.shape(1))) == -1:
-                x+= 1
-                coef.append(f'x{x}')
-            elif (preconditioned_matrix.item(i, preconditioned_matrix.shape(1))) == 0:
-                e+= 1
-                coef.append(f'e{x}')
 
-    def __preconditioner__(self, formattedInput: np.matrix):        
+    def __determine_coefs__(self, preconditioned_matrix: np.matrix):
+        coefs = []
+        x = 0
+        flag = True
+        
+        for i in range(0, preconditioned_matrix.shape[0]):
+            if (preconditioned_matrix.item(i, preconditioned_matrix.shape[1] -1)) != -1 and flag:
+                flag = False
+
+            if (preconditioned_matrix.item(i, preconditioned_matrix.shape[1] -1)) == -1 and flag:
+                x += 1
+                coefs.append(f'x{x}')
+            elif (preconditioned_matrix.item(i, preconditioned_matrix.shape[1] -1)) == 0:
+                ei = Utilities.get_col_index(preconditioned_matrix, i)
+                coefs.append(f'e{ei +1}')
+            elif (preconditioned_matrix.item(i, preconditioned_matrix.shape[1] -1)) == 1:
+                ai = Utilities.get_col_index(preconditioned_matrix, i)
+                coefs.append(f'a{ai +1}')
+
+        return coefs
+
+    def __preconditioner__(self, formattedInput: np.matrix):
         artificial_variables = []
         slack_variables = []
-        for j in range(0, formattedInput.shape[1] -1):            
-            item = formattedInput.item((formattedInput.shape[0] -1, j))
+        for j in range(0, formattedInput.shape[1] - 1):
+            item = formattedInput.item((formattedInput.shape[0] - 1, j))
             if item >= 0:
                 artificial_variables.append(1)
             else:
@@ -40,22 +50,22 @@ class BigM:
 
         print("Slack variables:" + str(slack_variables))
         print("Artificial variables:" + str(artificial_variables))
-        
+
         preconditioned_matrix = formattedInput.copy()
-        
+
         variable_flag_col = []
         for i in range(0, formattedInput.shape[0]):
             variable_flag_col.append([-1])
-        preconditioned_matrix = np.append(preconditioned_matrix, variable_flag_col, axis=1)
-        
+        preconditioned_matrix = np.append(
+            preconditioned_matrix, variable_flag_col, axis=1)
+
         print("1st version of the preconditioned matrix:")
         print(preconditioned_matrix)
 
         new_row = []
         for j in range(0, preconditioned_matrix.shape[1]):
             new_row.append(0)
-        
-        
+
         # Handling slack variables
         for k in range(0, len(slack_variables)):
             slack_variable_existence = False
@@ -64,15 +74,17 @@ class BigM:
                 new_row[k] = slack_variables[k]
 
             if k != 0:
-                new_row[k -1] = 0
-            
+                new_row[k - 1] = 0
+
             if slack_variable_existence:
-                preconditioned_matrix = np.insert(preconditioned_matrix, preconditioned_matrix.shape[0] -2, new_row, axis=0)
-                preconditioned_matrix.itemset((preconditioned_matrix.shape[0] -1, k), 0)
+                preconditioned_matrix = np.insert(
+                    preconditioned_matrix, preconditioned_matrix.shape[0] - 2, new_row, axis=0)
+                preconditioned_matrix.itemset(
+                    (preconditioned_matrix.shape[0] - 1, k), 0)
         new_row[k] = 0
 
         # Handling artificial variables
-        new_row[len(new_row) -1] = 1
+        new_row[len(new_row) - 1] = 1
         for k in range(0, len(artificial_variables)):
             artificial_variable_existence = False
             if artificial_variables[k] != 0:
@@ -80,23 +92,28 @@ class BigM:
                 new_row[k] = artificial_variables[k]
 
             if k != 0:
-                new_row[k -1] = 0
-            
+                new_row[k - 1] = 0
+
             if artificial_variable_existence:
-                preconditioned_matrix = np.insert(preconditioned_matrix, preconditioned_matrix.shape[0] -2, new_row, axis=0)                
-        
+                preconditioned_matrix = np.insert(
+                    preconditioned_matrix, preconditioned_matrix.shape[0] - 2, new_row, axis=0)
+
         print("2sec version of the preconditioned matrix:")
         print(preconditioned_matrix)
 
-        # Handling the equation
-        
+        # Determining the coefs
+        coefs = self.__determine_coefs__(preconditioned_matrix)
+        print(coefs)
 
-        
-        
+        # Converting to pandas df
+        preconditioned_matrix_t = preconditioned_matrix.transpose()
+        print("The transposed matrix")
+        print(preconditioned_matrix_t)
 
+        preconditioned_df = pd.DataFrame(preconditioned_matrix_t, columns = [*coefs, "condition", "flags"])
+        print("The dataframe")
+        print(preconditioned_df)
 
-        
-       
     def runBigM(self) -> np.matrix:
         # formattedInput: np.matrix
         """
@@ -107,8 +124,9 @@ class BigM:
         Returns:
             A list of matrices that corresponds to simplex iterations (+ the Big M initial phase of course)
         """
-        
+
         fake_data = np.matrix([[2, 1, 1], [1, 2, 1], [4, 6, 0], [2, 0, 0]])
         print(fake_data)
         print(type(fake_data))
         self.__preconditioner__(fake_data)
+        
