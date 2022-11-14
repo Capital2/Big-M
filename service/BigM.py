@@ -6,9 +6,9 @@ import pandas as pd
 class BigM:
 
     # Big M methods sesction
-
-    def __belog_to__(self, preconditioned_matrix: np.matrix,):
-        pass
+    
+    def __clean_preconditioned_df__(self, preconditioned_df: pd.DataFrame, row: list[int], columns: list[str]) -> pd.DataFrame:
+        print("Data cleaning to be continued.")
 
     def __determine_coefs__(self, preconditioned_matrix: np.matrix):
         coefs = []
@@ -113,6 +113,16 @@ class BigM:
         preconditioned_df = pd.DataFrame(preconditioned_matrix_t, columns = [*coefs, "condition", "flags"])
         print("The dataframe")
         print(preconditioned_df)
+        filtred_cols = preconditioned_df.filter(regex="a\d").columns
+        print("Filtered cols")
+        print(filtred_cols)
+
+        for col in filtred_cols:
+            preconditioned_df.loc[preconditioned_df.shape[0] -2, [col]] = float('-inf')
+
+        print(preconditioned_df)
+
+        preconditioned_df = self.__clean_preconditioned_df__(preconditioned_df, [], [])
 
     def runBigM(self) -> np.matrix:
         # formattedInput: np.matrix
