@@ -11,7 +11,7 @@ jobs:
         with:
           node-version: 16
       - run: cd frontend/
-      # - run: npm install
+      - run: npm ci
       - run: npm run build
   
   unit-testing-bigm:
