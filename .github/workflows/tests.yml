@@ -12,8 +12,9 @@ jobs:
           node-version: 18
       - name: install deps
         working-directory: ./frontend
-        run: npm ci
-      - run: npm run build
+        run: |
+          npm ci
+          npm run build
   
   unit-testing-bigm:
     runs-on: ubuntu-latest
