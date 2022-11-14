@@ -109,11 +109,17 @@ def formatUserInput(userInput):
     for i in range(1, len(userInput)): # skip the first line for now
         constraint = formatVars(userInput[i]).split(' ')
         if constraint[-1][0] == '>':
-            constraint.append('1') # 1 means greater than
+            # 2 means >=
+            # 1 means >
+            flag = '2' if constraint[-1][1] == '=' else '1'
+            constraint.append(flag)
         elif constraint[-1][0] == '=':
             constraint.append('0') # 0 means equal to
         else:
-            constraint.append('-1') # -1 means less than
+            # -2 means <=
+            # -1 means <
+            flag = '-2' if constraint[-1][1] == '=' else '-1'
+            constraint.append(flag) 
         constraint[-2] = formatConstraints(constraint[-2])
         res = castNumbers(constraint)
         for j in range(len(res)):
