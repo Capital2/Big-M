@@ -21,15 +21,14 @@ def validateUserInputSemantic(objectiveFunction, constraint):
 def formatUserInput(userInput):
     """
     The function takes an array of strings representing the input taken and **validated** from a jupyter user.
-    The function returns a matrix.
     PS: The function take care of a maximum of 3 variables(x, y, z) in a system i.e. R3.
     Arguments:
-        userInput : array of string
+        userInput : List[str]
     Returns:
-        Matrix : array of array of int
+        Matrix : List[List[int]]
     """
     def formatVars(s):
-        s = re.sub(' +', '', s.lower()) # remove spaces
+        s = re.sub(' +', '', s.lower()) # remove white spaces
         s = re.sub('x', 'x ', s)
         s = re.sub('y', 'y ', s)
         s = re.sub('z', 'z ', s)
@@ -44,10 +43,9 @@ def formatUserInput(userInput):
     
     def castNumbers(inp):
         """
-        The function takes a string representing a constraint or objective function
-        and returns an array of int.
+        The function takes a string representing a constraint or objective function.
         Arguments:
-            inp : List[str]
+            inp : str
         Returns:
             res : List[int]
         """
@@ -78,23 +76,8 @@ def formatUserInput(userInput):
         Returns:
             nbVar : int
         """
-        nbVar = 0
-        found = [False for _ in range(3)]
-        for i in range(1, len(userInput)):
-            if 'x' in userInput[i].lower() and not found[0]:
-                nbVar += 1
-                found[0] = True
-            if 'y' in userInput[i].lower() and not found[1]:
-                nbVar += 1
-                found[1] = True
-            if 'z' in userInput[i].lower() and not found[2]:
-                nbVar += 1
-                found[2] = True
-            if nbVar == 3: # we have all the variables
-                return nbVar
-        if 'z' in userInput[0].split('=')[1].lower() and not found[2]:
-            nbVar += 1
-        return nbVar
+        constraints = "".join(userInput[1:]).lower()
+        return ('x' in constraints) + ('y' in constraints) + ('z' in constraints)
     
     # sanitize the input by removing all the extra spaces
     for i in range(len(userInput)):
@@ -108,18 +91,14 @@ def formatUserInput(userInput):
 
     for i in range(1, len(userInput)): # skip the first line for now
         constraint = formatVars(userInput[i]).split(' ')
+        flag = '0' # 0 means equal to
         if constraint[-1][0] == '>':
-            # 2 means >=
-            # 1 means >
+            # 2 means >= and 1 means >
             flag = '2' if constraint[-1][1] == '=' else '1'
-            constraint.append(flag)
-        elif constraint[-1][0] == '=':
-            constraint.append('0') # 0 means equal to
-        else:
-            # -2 means <=
-            # -1 means <
+        elif constraint[-1][0] == '<':
+            # -2 means <= and -1 means <
             flag = '-2' if constraint[-1][1] == '=' else '-1'
-            constraint.append(flag) 
+        constraint.append(flag)
         constraint[-2] = formatConstraints(constraint[-2])
         res = castNumbers(constraint)
         for j in range(len(res)):
@@ -144,7 +123,6 @@ def validateUserInput(input):
     #remove white spaces from the input string
     strippedInput = re.sub(' ','', input.lower())
 
-    print(strippedInput)
     #get occurence of each variable
     occurenceOfX =re.sub('(max|min)[a-z]','',strippedInput).count("x")
     occurenceOfY=re.sub('(max|min)[a-z]','',strippedInput).count("y")
