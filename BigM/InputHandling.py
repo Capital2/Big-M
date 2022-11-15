@@ -28,7 +28,7 @@ def formatUserInput(userInput):
         Matrix : List[List[int]]
     """
     def formatVars(s):
-        s = re.sub(' +', '', s.lower()) # remove white spaces
+        s = re.sub(' +', '', s.lower()) # remove white spacess
         s = re.sub('x', 'x ', s)
         s = re.sub('y', 'y ', s)
         s = re.sub('z', 'z ', s)
