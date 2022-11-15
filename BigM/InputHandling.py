@@ -63,7 +63,7 @@ def formatUserInput(userInput):
                 res[idx] = 1
             else:
                 res[idx] = int(var)     
-        res[-2] = int(inp[-2]) # constraint row
+        res[-2] = int(inp[-2]) # constraint row 
         res[-1] = int(inp[-1]) # function row
         return res
 
