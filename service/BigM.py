@@ -6,32 +6,62 @@ import pandas as pd
 class BigM:
 
     # Big M methods sesction
-    
-    def __clean_preconditioned_df__(self, preconditioned_df: pd.DataFrame, row: list[int], columns: list[str]) -> pd.DataFrame:
-        print("Data cleaning to be continued.")
+
+    def __clean_preconditioned_df__(self, preconditioned_df: pd.DataFrame, rows: list[int], columns: list[str]) -> pd.DataFrame:
+        # Dropping rows
+        preconditioned_df.drop(rows, inplace=True)
+
+        # Droping columns
+        preconditioned_df.drop(columns, axis=1, inplace=True)
+
+        return preconditioned_df
+
 
     def __determine_coefs__(self, preconditioned_matrix: np.matrix):
         coefs = []
         x = 0
         flag = True
-        
+
         for i in range(0, preconditioned_matrix.shape[0]):
-            if (preconditioned_matrix.item(i, preconditioned_matrix.shape[1] -1)) != -1 and flag:
+            if (preconditioned_matrix.item(i, preconditioned_matrix.shape[1] - 1)) != -1 and flag:
                 flag = False
 
-            if (preconditioned_matrix.item(i, preconditioned_matrix.shape[1] -1)) == -1 and flag:
+            if (preconditioned_matrix.item(i, preconditioned_matrix.shape[1] - 1)) == -1 and flag:
                 x += 1
                 coefs.append(f'x{x}')
-            elif (preconditioned_matrix.item(i, preconditioned_matrix.shape[1] -1)) == 0:
+            elif (preconditioned_matrix.item(i, preconditioned_matrix.shape[1] - 1)) == 0:
                 ei = Utilities.get_col_index(preconditioned_matrix, i)
                 coefs.append(f'e{ei +1}')
-            elif (preconditioned_matrix.item(i, preconditioned_matrix.shape[1] -1)) == 1:
+            elif (preconditioned_matrix.item(i, preconditioned_matrix.shape[1] - 1)) == 1:
                 ai = Utilities.get_col_index(preconditioned_matrix, i)
                 coefs.append(f'a{ai +1}')
+            elif (preconditioned_matrix.item(i, preconditioned_matrix.shape[1] - 1)) == 2:
+                coefs.append("p")
 
         return coefs
 
+
+    def __transform_equation__(self, preconditioned_matrix: np.matrix) -> np.matrix:
+        # Multiply all the coefs of the equations by -1
+        for i in range(0, preconditioned_matrix.shape[0]):
+            preconditioned_matrix.itemset(
+                (i, preconditioned_matrix.shape[1]-2), preconditioned_matrix.item((i, preconditioned_matrix.shape[1]-2)) * -1)
+
+        print("here")
+        # Add the P coef
+        p_row = [0] * (preconditioned_matrix.shape[1])
+        
+
+        p_row[len(p_row) - 2] = 1
+        p_row[len(p_row) - 1] = 2  # Flag hat stands a p coef
+        preconditioned_matrix = np.insert(
+                    preconditioned_matrix, preconditioned_matrix.shape[0] - 2, p_row, axis=0)
+
+        return preconditioned_matrix
+
+
     def __preconditioner__(self, formattedInput: np.matrix):
+        # Adding the artificial and slack variables to the formattedInput matrix
         artificial_variables = []
         slack_variables = []
         for j in range(0, formattedInput.shape[1] - 1):
@@ -48,11 +78,14 @@ class BigM:
             else:
                 slack_variables.append(+1)
 
-        print("Slack variables:" + str(slack_variables))
-        print("Artificial variables:" + str(artificial_variables))
+        # print("Slack variables:" + str(slack_variables))
+        # print("Artificial variables:" + str(artificial_variables))
 
+        # Copy the formattedInput to the preconditioned_matrix (data is backuped in the formattedInput + avoid refrence access)
         preconditioned_matrix = formattedInput.copy()
-
+        
+        # Initialize a new column with -1 values (by default) to determine later on
+        # if a variable is a slack or artificial variable
         variable_flag_col = []
         for i in range(0, formattedInput.shape[0]):
             variable_flag_col.append([-1])
@@ -62,6 +95,8 @@ class BigM:
         print("1st version of the preconditioned matrix:")
         print(preconditioned_matrix)
 
+        # Initilize default row that is going to modified based on the
+        # the slack and artificial variables positions in the system
         new_row = []
         for j in range(0, preconditioned_matrix.shape[1]):
             new_row.append(0)
@@ -101,28 +136,42 @@ class BigM:
         print("2sec version of the preconditioned matrix:")
         print(preconditioned_matrix)
 
-        # Determining the coefs
+        # Adding the P coef + making modifications to max / min equation
+        preconditioned_matrix = self.__transform_equation__(preconditioned_matrix)
+        
+        print("Equation modifications")
+        print(preconditioned_matrix)
+       
+        # Determining the coefs within our system after adding
+        # the slack and artificial variables
         coefs = self.__determine_coefs__(preconditioned_matrix)
         print(coefs)
 
-        # Converting to pandas df
+        # Converting to pandas df for ease of manipulation 
+        # and pretty display in jupiter notebook
         preconditioned_matrix_t = preconditioned_matrix.transpose()
+        
         print("The transposed matrix")
         print(preconditioned_matrix_t)
 
         preconditioned_df = pd.DataFrame(preconditioned_matrix_t, columns = [*coefs, "condition", "flags"])
+        
         print("The dataframe")
         print(preconditioned_df)
+        
         filtred_cols = preconditioned_df.filter(regex="a\d").columns
+        
         print("Filtered cols")
         print(filtred_cols)
 
         for col in filtred_cols:
-            preconditioned_df.loc[preconditioned_df.shape[0] -2, [col]] = float('-inf')
+            preconditioned_df.loc[preconditioned_df.shape[0] -2, [col]] = float('inf')
 
+        # Drop columns and delete rows that are unnecessary
+        preconditioned_df = self.__clean_preconditioned_df__(preconditioned_df, [preconditioned_df.shape[0] -1], ["flags"])
+
+        print("The dataframe after cleaning")
         print(preconditioned_df)
-
-        preconditioned_df = self.__clean_preconditioned_df__(preconditioned_df, [], [])
 
     def runBigM(self) -> np.matrix:
         # formattedInput: np.matrix
