@@ -205,6 +205,7 @@ class BigM(Simplex):
             preconditioned_df = self.__preconditioner(formattedInput)
             print("Preconditioned DataFrame")
             print(preconditioned_df)
+            # preconditioned_df.to_csv("data.csv", index=False)
 
             # Preparing the matrix for the simplex algorithm
             init_simplex_df = self.__prepare_matrix(preconditioned_df)
