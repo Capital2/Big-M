@@ -3,9 +3,12 @@ from utilities import Utilities
 import pandas as pd
 from simplex import Simplex
 from aliases import Variables, Iterations
-
+from math import pow
 
 class BigM(Simplex):
+
+    def __init__(self) -> None:
+        self.m = pow(10, 9)
 
     def __clean_preconditioned_df(self, preconditioned_df: pd.DataFrame, rows: list[int], columns: list[str]) -> pd.DataFrame:
         # Dropping rows
@@ -164,7 +167,7 @@ class BigM(Simplex):
         # print(filtred_cols)
 
         for col in filtred_cols:
-            preconditioned_df.loc[preconditioned_df.shape[0] -2, [col]] = float('inf')
+            preconditioned_df.loc[preconditioned_df.shape[0] -2, [col]] = self.m
 
         # Drop columns and delete rows that are unnecessary
         preconditioned_df = self.__clean_preconditioned_df(preconditioned_df, [preconditioned_df.shape[0] -1], ["flags"])
