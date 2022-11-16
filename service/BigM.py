@@ -2,6 +2,7 @@ import numpy as np
 from utilities import Utilities
 import pandas as pd
 from simplex import Simplex
+from aliases import Variables, Iterations
 
 
 class BigM(Simplex):
@@ -175,8 +176,8 @@ class BigM(Simplex):
 
 
     # This method will perform operations between rows to get
-    # rid of the Ms i the artificial variables columns
-    def simplex_matrix_preparation(self, preconditioned_df: pd.DataFrame) -> pd.DataFrame:
+    # rid of the Ms in the artificial variables columns
+    def __prepare_matrix(self, preconditioned_df: pd.DataFrame) -> pd.DataFrame:
         """
         This method performs operations between rows of the preconditioned DataFrame
         to get rid of every M that resides in one of the artificial variables columns.
@@ -190,7 +191,7 @@ class BigM(Simplex):
         pass
 
 
-    def runBigM(self, formattedInput: np.matrix) -> np.matrix:
+    def runBigM(self, formattedInput: np.matrix) -> Iterations:
         """
         This function solves linear optimisation problems with the Big M method and returns each iteration
         in a seperate matrix.
@@ -206,9 +207,12 @@ class BigM(Simplex):
             print(preconditioned_df)
 
             # Preparing the matrix for the simplex algorithm
-            init_simplex_df = self.simplex_matrix_preparation(preconditioned_df)
+            init_simplex_df = self.__prepare_matrix(preconditioned_df)
 
             # Running the normal simplex algorithm on the matrix
-            iterations = super().run_simplex(init_simplex_df)
+            iterations: Iterations = super()._perform_simplex(init_simplex_df)
+
+            return iterations
         except:
             print("oops")
+            return []
