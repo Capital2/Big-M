@@ -9,6 +9,7 @@ class BigM(Simplex):
 
     def __init__(self) -> None:
         self.m = pow(10, 9)
+        
 
     def __clean_preconditioned_df(self, preconditioned_df: pd.DataFrame, rows: list[int], columns: list[str]) -> pd.DataFrame:
         # Dropping rows
