@@ -12,11 +12,11 @@ def main():
 
 
 if __name__ == "__main__":
-    # main()
-    x = float('inf') +5
-    y = float('inf') +100000000
+    main()
+    # x = float('inf') +5
+    # y = float('inf') +100000000
 
-    if y > x:
-        print("yap")
-    else:
-        print("9ad 9ad")
+    # if y > x:
+    #     print("yap")
+    # else:
+    #     print("9ad 9ad")
