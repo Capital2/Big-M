@@ -1,6 +1,7 @@
 import numpy as np;
 
 class Utilities:
+    
     @staticmethod
     def get_col_index(matrix: np.matrix, i: int) -> int:
         ix = -1
