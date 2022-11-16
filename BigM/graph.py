@@ -5,18 +5,32 @@ import numpy as np
 
 def graph(linProg):
   
-    def removeDuplicate(intersectionPoints):
+    def removeDuplicateInf():
         l = []
         intersectionPoints.sort(key=lambda k:(k[0],k[1]))
-        for i in range(0,len(intersectionPoints)-1):
-          if intersectionPoints[i][0] != intersectionPoints[i+1][0]:
-            l.append(intersectionPoints[i])
-            if(i+1 == len(intersectionPoints)-1):
+        for i in range(0,len(intersectionPoints)):
+            if intersectionPoints[i][0] != intersectionPoints[i+1][0]:
+                l.append(intersectionPoints[i])
+                if(i+1 == len(intersectionPoints)-1):
+                    l.append(intersectionPoints[i+1])
+                    break
+            elif i+1 == len(intersectionPoints)-1:
                 l.append(intersectionPoints[i+1])
                 break
-          elif i+1 == len(intersectionPoints)-1:
-            l.append(intersectionPoints[i+1])
-            break
+        return l
+
+    def removeDuplicateSup(offsetList):
+        l = []
+        offsetList.sort(key=lambda k:(k[0],-k[1]))
+        for i in range(0,len(offsetList)):
+            if offsetList[i][0] != offsetList[i+1][0]:
+                l.append(offsetList[i])
+                if(i+1 == len(offsetList)-1):
+                    l.append(offsetList[i+1])
+                    break
+            elif i+1 == len(offsetList)-1:
+                l.append(offsetList[i+1])
+                break
         return l
 
     def offsetPoints(intersectionPoints,listOfConstraints):
@@ -28,7 +42,7 @@ def graph(linProg):
                 for intersectionPoint in intersectionPoints:
                     x = intersectionPoint[0]
                     y = intersectionPoint[1]
-                    if(round(a*x+b*y,4)==c or x < 0 ):
+                    if((round(a*x+b*y,4)==c or x < 0) and  intersectionPoint not in offset ):
                         offset.append(intersectionPoint)
         
     def paintPoints(intersectionPoints,listOfConstraints):
@@ -40,7 +54,7 @@ def graph(linProg):
                     for intersectionPoint in intersectionPoints:
                         x = intersectionPoint[0]
                         y = intersectionPoint[1]
-                        if(round(a*x+b*y,4)==c or x < 0 ):
+                        if(round((a*x+b*y,4)==c or x < 0) and intersectionPoint not in color ):
                             color.append(intersectionPoint)
             
 
@@ -170,11 +184,12 @@ def graph(linProg):
         
         #remove intersection points that are out of the definition domain
         validIntersection(intersectionPoints,listOfConstraints)
-
-       
+        
         offsetPoints(intersectionPoints,listOfConstraints)
         paintPoints(intersectionPoints,listOfConstraints)
-        color = removeDuplicate(color)
+        color = removeDuplicateInf()
+        offset = removeDuplicateSup(offset)
+
        
         #color the area of definition domain
         highlightArea()
