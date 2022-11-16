@@ -1,25 +1,23 @@
 import numpy as np
 import pandas as pd
-from abc import ABC, abstractmethod
 from aliases import Iterations, Variables
 
-class Simplex(ABC):
+class Simplex():
     
-    @abstractmethod
-    def simplex_matrix_preparation(self):
+    def __select_vars(self, init_simplex_df: pd.DataFrame) -> Variables:
         pass
 
 
-    def select_vars(self, init_simplex_df: pd.DataFrame) -> Variables:
-        variables = {"bv": [], "nbv": []}
-        return variables
-
-
-    def verify_solution_existene():
-        pass
+    def __verify_solution_existence(self, variables: Variables) -> bool:
+        exist: bool = True
+        return exist
     
 
-    def run_simplex(self, init_simplex_df: pd.DataFrame) -> Iterations:
+    def _perform_simplex(self, init_simplex_df: pd.DataFrame) -> Iterations:
+        variables: Variables = self.__select_vars(init_simplex_df)
+        exist = self.__verify_solution_existence(variables)
+        if not exist:
+            raise ValueError('SIMPLEX_SOLULTION_DOES_NOT_EXIST,')
         iterations: Iterations = []
         print("Going to run simplex")
         return iterations
