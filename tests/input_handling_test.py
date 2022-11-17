@@ -3,7 +3,7 @@ from mock import patch
 # Tested class
 
 from BigM import InputHandling, graph
-class TestBigM(unittest.TestCase):
+class TestIH(unittest.TestCase):
 
     def setUp(self) -> None:
         self.exampleConsTrue = ["3x+y=1", "x-Y>=0", " x +  50y<6 ", "   x+y-z>0 ", "y<0"]

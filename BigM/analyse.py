@@ -6,6 +6,9 @@
 
 
 def AnalyseData(variablesdebases , variableshorsbases , mat):
+    """
+    Not Tested
+    """
     print("les variables de bases dans cette iteration sont")
     for var in enumerate(variablesdebases):
         nomvariable=var[1].get('name')
