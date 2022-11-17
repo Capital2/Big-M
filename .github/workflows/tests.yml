@@ -35,4 +35,5 @@ jobs:
           pip install mock
       - name: Test with unittest
         run: |
-          python3 -m unittest tests/BigM_test.py -v
+          python3 -m unittest tests/Bigm_test.py -v
+          python -m unittest tests/input_handling_test.py -v
