@@ -8,6 +8,7 @@ class Simplex():
         """
         Selects the basic and non-basic variables from the initial simplex dataframe.
         """
+        # TODO: what if 2 variables have the only non-zero value in the same row? which one to select?
         ret_vars = (dict(), dict())
         for col in init_simplex_df.columns:
             if col in ['condition', 'p']: # skip the condition and p columns
@@ -26,7 +27,7 @@ class Simplex():
         Verifies if the solution exists.
         checks if all the basic variables are positive.
         """
-        for key, value in variables[1].items():
+        for _, value in variables[1].items():
             if value < 0:
                 return False
         return True
