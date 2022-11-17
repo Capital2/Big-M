@@ -8,14 +8,12 @@ class Simplex():
         """
         Selects the basic and non-basic variables from the initial simplex dataframe.
         """
-        # print the column a1
         ret_vars = (dict(), dict())
-        numberOfRows = init_simplex_df.shape[0]
         for col in init_simplex_df.columns:
             if col in ['condition', 'p']: # skip the condition and p columns
                 continue
             column = init_simplex_df.loc[:, col]
-            if column[column == 0].count() == numberOfRows-1: # basic variable
+            if column[column != 0].count() == 1: # basic variable (i.e. have only 1 non zero value)
                 nonZeroRow = column[column != 0].index[0] # get the row index of the non-zero value
                 ret_vars[0][col] = init_simplex_df.loc[nonZeroRow]['condition']
             else: # non basic variable
