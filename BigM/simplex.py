@@ -1,6 +1,3 @@
-import numpy as np
-import pandas as pd
-from aliases import Iterations, Variables
 
 class Simplex():
     
@@ -9,16 +6,16 @@ class Simplex():
         Selects the basic and non-basic variables from the initial simplex dataframe.
         """
         # TODO: what if 2 variables have the only non-zero value in the same row? which one to select?
-        ret_vars = (dict(), dict())
+        ret_vars = ([], [])
         for col in init_simplex_df.columns:
             if col in ['condition', 'p']: # skip the condition and p columns
                 continue
             column = init_simplex_df.loc[:, col]
             if column[column != 0].count() == 1: # basic variable (i.e. have only 1 non zero value)
                 nonZeroRow = column[column != 0].index[0] # get the row index of the non-zero value
-                ret_vars[0][col] = init_simplex_df.loc[nonZeroRow]['condition']
+                ret_vars[0].append((col, init_simplex_df.loc[nonZeroRow]['condition'], nonZeroRow))
             else: # non basic variable
-                ret_vars[1][col] = 0
+                ret_vars[1].append((col, 0, 0))
         return ret_vars
 
 
@@ -27,17 +24,8 @@ class Simplex():
         Verifies if the solution exists.
         checks if all the basic variables are positive.
         """
-        for _, value in variables[1].items():
+        for _, value, _ in variables[0]:
             if value < 0:
                 return False
         return True
     
-
-    def _perform_simplex(self, init_simplex_df: pd.DataFrame) -> Iterations:
-        variables: Variables = self.__select_vars(init_simplex_df)
-        exist = self.__verify_solution_existence(variables)
-        if not exist:
-            raise ValueError('SIMPLEX_SOLULTION_DOES_NOT_EXIST,')
-        iterations: Iterations = []
-        print("Going to run simplex")
-        return iterations
