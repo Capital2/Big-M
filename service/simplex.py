@@ -20,11 +20,14 @@ class Simplex():
                 ret_vars[0][col] = init_simplex_df.loc[nonZeroRow]['condition']
             else: # non basic variable
                 ret_vars[1][col] = 0
-        print(ret_vars)
         return ret_vars
 
 
     def __verify_solution_existence(self, variables: Variables) -> bool:
+        """
+        Verifies if the solution exists.
+        checks if all the basic variables are positive.
+        """
         for key, value in variables[1].items():
             if value < 0:
                 return False
