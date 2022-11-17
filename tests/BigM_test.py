@@ -23,24 +23,24 @@ class TestBigM(unittest.TestCase):
             self.assertFalse(tested,f"{t} should be false")
     
     def test_formatUserInput(self):
-        testcase1 = (["Max Z = 3x+y","x-2y<=2","3x+5y>=8"], [ [1, 3, 3], [-2, 5, 1], [2, 8, 0], [-1, 1, 1] ])
-        testcase2 = (["Min Z = 3x+y+2z","x-2y-z<=2","3x+5y+50z>=8"], [ [1, 3, 3], [-2, 5, 1], [-1, 50, 2], [2, 8, 0], [-1, 1, -1] ])
-        testcase3 = (["Max Z = 3x+y+2z","x-z=2","5y+50z>=8", "z>=0"], [ [1, 0, 0, 3], [0, 5, 0, 1], [-1, 50, 1, 2], [2, 8, 0, 0], [0, 1, 1, 1] ])
-        testcase4 = (["Max Z = x-3y", "3y-x = 5", "-y+3x <= -1"], [ [-1, 3, 1], [3, -1, -3], [5, -1, 0], [0, -1, 1] ])
+        testcase1 = (["Max Z = 3x+y","x-2y<=2","3x+5y>=8"], [ [1, 3, 3], [-2, 5, 1], [2, 8, 0], [-2, 2, 1] ])
+        testcase2 = (["Min Z = 3x+y+2z","x-2y-z<2","3x+5y+50z>8"], [ [1, 3, 3], [-2, 5, 1], [-1, 50, 2], [2, 8, 0], [-1, 1, -1] ])
+        testcase3 = (["Max Z = 3x+y+2z","x-z=2","5y+50z>8", "z>=0"], [ [1, 0, 0, 3], [0, 5, 0, 1], [-1, 50, 1, 2], [2, 8, 0, 0], [0, 1, 2, 1] ])
+        testcase4 = (["Max Z = x-3y", "3y-x = 5", "-y+3x < -1"], [ [-1, 3, 1], [3, -1, -3], [5, -1, 0], [0, -1, 1] ])
 
         self.assertEqual(InputHandling.formatUserInput(testcase1[0]), testcase1[1])
         self.assertEqual(InputHandling.formatUserInput(testcase2[0]), testcase2[1])
         self.assertEqual(InputHandling.formatUserInput(testcase3[0]), testcase3[1])
         self.assertEqual(InputHandling.formatUserInput(testcase4[0]), testcase4[1])
 
-    def test_drawGraph(self):
-        testcase1 = (["Max Z = 3x+y","x-2y<=2","3x+5y>=8"], [ [1, 3, 3], [-2, 5, 1], [2, 8, 0], [-1, 1, 1] ])
-        # A way of testing the draw func, is that we test whether the show function have been
-        # called or not relying on the fact that the show() func is usually called at the end of 
-        # the drawGraph func.
-        with patch("matplotlib.pyplot.show") as show_patch:
-            InputHandling.drawGraph(testcase1[0])
-            show_patch.assert_called()
+    # def test_drawGraph(self):
+    #     testcase1 = (["Max Z = 3x+y","x-2y<=2","3x+5y>=8"], [ [1, 3, 3], [-2, 5, 1], [2, 8, 0], [-1, 1, 1] ])
+    #     # A way of testing the draw func, is that we test whether the show function have been
+    #     # called or not relying on the fact that the show() func is usually called at the end of 
+    #     # the drawGraph func.
+    #     with patch("matplotlib.pyplot.show") as show_patch:
+    #         InputHandling.drawGraph(testcase1[0])
+    #         show_patch.assert_called()
     
 if __name__ == '__main__':
     unittest.main()
