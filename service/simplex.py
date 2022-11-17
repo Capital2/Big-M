@@ -4,13 +4,31 @@ from aliases import Iterations, Variables
 
 class Simplex():
     
-    def __select_vars(self, init_simplex_df: pd.DataFrame) -> Variables:
-        pass
+    def __select_vars(self, init_simplex_df: pd.DataFrame) -> tuple[Variables, Variables]:
+        """
+        Selects the basic and non-basic variables from the initial simplex dataframe.
+        """
+        # print the column a1
+        ret_vars = (dict(), dict())
+        numberOfRows = init_simplex_df.shape[0]
+        for col in init_simplex_df.columns:
+            if col in ['condition', 'p']: # skip the condition and p columns
+                continue
+            column = init_simplex_df.loc[:, col]
+            if column[column == 0].count() == numberOfRows-1: # basic variable
+                nonZeroRow = column[column != 0].index[0] # get the row index of the non-zero value
+                ret_vars[0][col] = init_simplex_df.loc[nonZeroRow]['condition']
+            else: # non basic variable
+                ret_vars[1][col] = 0
+        print(ret_vars)
+        return ret_vars
 
 
     def __verify_solution_existence(self, variables: Variables) -> bool:
-        exist: bool = True
-        return exist
+        for key, value in variables[1].items():
+            if value < 0:
+                return False
+        return True
     
 
     def _perform_simplex(self, init_simplex_df: pd.DataFrame) -> Iterations:
