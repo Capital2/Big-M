@@ -12,7 +12,7 @@ class TestIH(unittest.TestCase):
         return super().setUp()
 
     def test_run_bigm(self):
-        ip = [ [1, 3, 3], [-2, 5, 1], [2, 8, 0], [-2, 2, 1] ]
+        ip = np.matrix([ [1, 3, 3], [-2, 5, 1], [2, 8, 0], [-2, 2, 1] ])
         print(self.bm.runBigM(ip))
 
         

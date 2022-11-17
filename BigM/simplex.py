@@ -137,7 +137,7 @@ class Simplex():
         #     raise ValueError('SIMPLEX_SOLULTION_DOES_NOT_EXIST,')
 
         # Test
-        init_simplex_df = pd.read_csv("simplex_data.csv")
+        #init_simplex_df = pd.read_csv("simplex_data.csv")
         bv = [("s1", 20, 0), ("a2", 5, 1),
               ("a3", 10, 2), ("p", -15000000000, 3)]
         nbv = [("x1", 0, -1), ("x2", 0, -1), ("x3", 0, -1), ("s3", 0, -1)]
