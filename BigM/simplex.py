@@ -15,7 +15,7 @@ class Simplex():
                 nonZeroRow = column[column != 0].index[0] # get the row index of the non-zero value
                 ret_vars[0].append((col, init_simplex_df.loc[nonZeroRow]['condition'], nonZeroRow))
             else: # non basic variable
-                ret_vars[1].append((col, 0, 0))
+                ret_vars[1].append((col, 0, -1))
         return ret_vars
 
 
