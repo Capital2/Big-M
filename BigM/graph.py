@@ -87,4 +87,3 @@ def drawGraph(formattedUserInput):
     plt.grid()
     plt.legend()
     plt.show()
-drawGraph([[ 1, 0,3], [ 0, 1, 2], [ 4, 6, 18], [ 1, -1,-1]])  
