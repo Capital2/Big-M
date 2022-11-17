@@ -1,7 +1,8 @@
-import numpy as np;
+import numpy as np
+
 
 class Utilities:
-    
+
     @staticmethod
     def get_col_index(matrix: np.matrix, i: int) -> int:
         ix = -1
@@ -10,3 +11,11 @@ class Utilities:
                 ix = j
                 break
         return ix
+
+    @staticmethod
+    def handle_type_detection(x: any):
+        if type(x) == str:
+            x = x[1: len(x)]
+            return float(x) * -1
+        else:
+            return x

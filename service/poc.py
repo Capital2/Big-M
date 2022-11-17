@@ -6,7 +6,7 @@ def simplex(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def main():
-    df = pd.read_csv("data.csv")
+    df = pd.read_csv("simplex_data.csv")
     print(df)
     simplex(df)
 
