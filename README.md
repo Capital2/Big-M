@@ -91,6 +91,8 @@ A uni project with the goal of creating a Big M solver for linear programming pr
 ### Built With
 
 * [![React][React.js]][React-url]
+* [![FastAPI][FastAPI.py]][FastAPI-url]
+* ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -198,7 +200,7 @@ Project Link: [https://github.com/Capital2/Big-M](https://github.com/Capital2/Bi
 ## Acknowledgments
 
 * [Othneildrew for the cool README](https://github.com/othneildrew/Best-README-Template)
-* []()
+* [AWesome Badges](https://github.com/Ileriayo/markdown-badges)
 * []()
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -236,3 +238,5 @@ Project Link: [https://github.com/Capital2/Big-M](https://github.com/Capital2/Bi
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
+[FastAPI.py]: https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi
+[FastAPI-url]:https://fastapi.tiangolo.com/
