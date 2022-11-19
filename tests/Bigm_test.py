@@ -19,7 +19,7 @@ class TestIH(unittest.TestCase):
                 np.matrix([ [5, 7, 1, -4], [-2, 200, -3, -9], [2, -1, -2, -2], [40, 1, 5, 0], [-2, 0, 0, 0] ])]
         for test in tests:
             self.bm.runBigM(test)
-            # TODO assert
+            # TODO assert dominance ha
 
         
 if __name__ == '__main__':
