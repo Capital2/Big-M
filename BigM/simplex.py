@@ -131,17 +131,20 @@ class Simplex():
         return updated_basic_variables
 
     def _perform_simplex(self, init_simplex_df: pd.DataFrame) -> Iterations:
-        # variables = self.__select_vars(init_simplex_df)
-        # exist = self.__verify_solution_existence(variables)
-        # if not exist:
-        #     raise ValueError('SIMPLEX_SOLULTION_DOES_NOT_EXIST,')
+        variables = self.__select_vars(init_simplex_df)
+        exist = self.__verify_solution_existence(variables)
+        if not exist:
+            raise ValueError('SIMPLEX_SOLULTION_DOES_NOT_EXIST,')
 
         # Test
-        #init_simplex_df = pd.read_csv("simplex_data.csv")
-        bv = [("s1", 20, 0), ("a2", 5, 1),
-              ("a3", 10, 2), ("p", -15000000000, 3)]
-        nbv = [("x1", 0, -1), ("x2", 0, -1), ("x3", 0, -1), ("s3", 0, -1)]
+        # init_simplex_df = pd.read_csv("simplex_data.csv")
+        # bv = [("s1", 20, 0), ("a2", 5, 1),
+        #       ("a3", 10, 2), ("p", -15000000000, 3)]
+        # nbv = [("x1", 0, -1), ("x2", 0, -1), ("x3", 0, -1), ("s3", 0, -1)]
         # End Test
+
+        bv = variables[0]
+        nbv = variables[1]
 
         iteration = init_simplex_df.copy()
         ratio = [0] * iteration.shape[0]
