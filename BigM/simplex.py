@@ -3,6 +3,8 @@ import pandas as pd
 from aliases import Iterations, Variables, Variable
 from utilities import Utilities
 
+pd.options.mode.chained_assignment = None
+
 
 class Simplex():
 
@@ -13,13 +15,16 @@ class Simplex():
         # TODO: what if 2 variables have the only non-zero value in the same row? which one to select?
         ret_vars = ([], [])
         for col in init_simplex_df.columns:
-            if col in ['condition', 'p']: # skip the condition and p columns
+            if col in ['condition', 'p']:  # skip the condition and p columns
                 continue
             column = init_simplex_df.loc[:, col]
-            if column[column != 0].count() == 1: # basic variable (i.e. have only 1 non zero value)
-                nonZeroRow = column[column != 0].index[0] # get the row index of the non-zero value
-                ret_vars[0].append((col, init_simplex_df.loc[nonZeroRow]['condition'], nonZeroRow))
-            else: # non basic variable
+            # basic variable (i.e. have only 1 non zero value)
+            if column[column != 0].count() == 1:
+                # get the row index of the non-zero value
+                nonZeroRow = column[column != 0].index[0]
+                ret_vars[0].append(
+                    (col, init_simplex_df.loc[nonZeroRow]['condition'], nonZeroRow))
+            else:  # non basic variable
                 ret_vars[1].append((col, 0, -1))
         return ret_vars
 
@@ -50,7 +55,7 @@ class Simplex():
 
     def __find_min_ratio(self, iteration: pd.DataFrame) -> int:
         ratio = iteration["ratio"]
-        ratio = ratio.drop(ratio.size - 1)
+        ratio = ratio.drop(ratio.size - 1)  # potential pb at this line
         min_index = ratio.argmin()
         return min_index
 
@@ -75,16 +80,15 @@ class Simplex():
     def __transform_pivot_columns(self, iteration: pd.DataFrame, pivot: dict) -> pd.DataFrame:
         for i in range(0, iteration.shape[0]):
             if i != pivot["position"]["row"] and iteration.iloc[i, pivot["position"]["col"]] != 0:
-                pivot_row_coef = iteration.iloc[i,
-                                                pivot["position"]["col"]] / pivot["value"]
+                pivot_row_coef = iteration.iloc[i, pivot["position"]["col"]]
+
                 tmp_pivot_row = iteration.iloc[pivot["position"]["row"]]
                 tmp_pivot_row = tmp_pivot_row.drop(
                     labels=["ratio", "operations"])
                 tmp_pivot_row = tmp_pivot_row.apply(
                     lambda item: item * pivot_row_coef * -1)
                 for j in range(0, tmp_pivot_row.size):
-                    iteration.iloc[i, j] = iteration.iloc[i,
-                                                          j] + tmp_pivot_row[j]
+                    iteration.iloc[i, j] = iteration.iloc[i, j] + tmp_pivot_row[j]
 
                 iteration["operations"][i] = f'L{i}<-L{i}+({pivot_row_coef *-1}*LP)'
 
@@ -136,13 +140,6 @@ class Simplex():
         if not exist:
             raise ValueError('SIMPLEX_SOLULTION_DOES_NOT_EXIST,')
 
-        # Test
-        # init_simplex_df = pd.read_csv("simplex_data.csv")
-        # bv = [("s1", 20, 0), ("a2", 5, 1),
-        #       ("a3", 10, 2), ("p", -15000000000, 3)]
-        # nbv = [("x1", 0, -1), ("x2", 0, -1), ("x3", 0, -1), ("s3", 0, -1)]
-        # End Test
-
         bv = variables[0]
         nbv = variables[1]
 
@@ -155,14 +152,18 @@ class Simplex():
         iterations.append((iteration.copy(), bv, nbv))
         done = False
         while not done:
+            # Utilities.debug(iteration, "Iteration at the start")
+
             # Determine the max coef position
             coef_position = self.__find_equation_coef(iteration)
+            # Utilities.debug(coef_position, "The coef position")
 
             # Calculating ratio
-            # iteration["ratio"] = iteration.apply(lambda row: row["condition"] / row[coef_position["col_name"]] if row.name != coef_position["row"] else 0,
-            #                                      axis=1 )
             iteration["ratio"] = iteration.apply(
                 self.__calculate_ratio, axis=1, args=[coef_position])
+            iteration = iteration.round(5)
+            # Utilities.debug(iteration, "After calculating the ratio")
+            
 
             # Determine the min ratio position
             min_ratio_position = {
@@ -180,16 +181,27 @@ class Simplex():
                 "value": iteration.iloc[pivot_position["row"], pivot_position["col"]],
                 "position": pivot_position
             }
+            # Utilities.debug(pivot, "calculating pivot + position")
 
             # Perform a transformation of the pivot row to make the pivot value equals to one
             iteration = self.__transform_pivot_row(iteration, pivot)
+            iteration = iteration.round(5)
+            # Utilities.debug(iteration, "Making the pivot row to 1")
+
+            # Updating the pivot value
+            pivot = {
+                **pivot,
+                "value": 1
+            }
 
             # Perform transformations on the other rows to make all the values of the pivot column
             # except the pivot equal to zero
             iteration = self.__transform_pivot_columns(iteration, pivot)
+            # Utilities.debug(iteration, "making the pivot to zeros")
 
             # Verify if we hit the final iteration of the simplex algorithm
             done = self.__verify(iteration)
+            # Utilities.debug(done, "simplex stop flag")
 
             # Update basic and non basic variables and the iterations list
             bv = self.__update(iteration, bv)
@@ -208,6 +220,7 @@ class Simplex():
             nbv.remove(self.__find_variable_by_name(in_variable[0], nbv))
             bv.append(in_variable)
 
+            # Utilities.debug(iteration, "Iteration at the end")
             iterations.append((iteration.copy(), bv, nbv))
 
             iteration = self.__reset_operations(iteration)
