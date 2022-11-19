@@ -19,3 +19,13 @@ class Utilities:
             return float(x) * -1
         else:
             return x
+
+    @staticmethod
+    def debug(entity: any, msg:str = None):
+        print()
+        if msg != None:
+            print(msg)
+        print(entity)
+        print("*************************************")
+        input('press any key to continue.')
+        print()
