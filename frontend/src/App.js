@@ -1,9 +1,14 @@
 import './App.css';
+import StatCellList from './components/StatsCellList';
+import Footer from './layout/Footer';
+import Navbar from './layout/Navbar';
 
 function App() {
   return (
     <div className="App">
-      <p>App</p>
+      <Navbar/>
+      <Footer/>
+      <StatCellList/>
     </div>
   );
 }

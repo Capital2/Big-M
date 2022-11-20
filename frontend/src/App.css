@@ -1,1 +1,12 @@
 /* App custom styling */
+.navBarText{
+    color:white;
+    margin: 10px 10px 10px 10px;
+    font-size: 30px;
+}
+.footer{
+    position: fixed;
+    left:0;
+    bottom:0;
+    right:0;
+}
