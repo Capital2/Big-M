@@ -10,3 +10,11 @@
     bottom:0;
     right:0;
 }
+
+.radioLabel{
+    font-size: 25px;
+    vertical-align: text-top;
+}
+.inputfield{
+    width: 50px;
+}

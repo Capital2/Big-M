@@ -3,7 +3,7 @@ import { MDBIcon} from 'mdb-react-ui-kit';
 export default function StatCell(props) {
   return (
 
-       <div className="d-flex flex-column mb-5">
+       <div className="d-flex flex-column mb-5 square border rounded-7">
         <div className="p-2">{props.title}</div>
         <div className="p-2">
           <div class="d-flex justify-content-around">
