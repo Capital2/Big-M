@@ -54,7 +54,7 @@ def drawGraph(formattedUserInput):
             plt.plot(x, y, randomColor,label=f"{a}x+{b}y{operator}{c}")   
 
 
-    def isInFeasibleRegion(constraints, point):
+    def inFeasibleRegion(constraints, point):
         """
         Checks if a given point is in the feasible region.
         i.e. if the point satisfies all the constraints.
@@ -111,10 +111,10 @@ def drawGraph(formattedUserInput):
                     intersections.add((x,y))
         for intersection in intersections:
             # check if intersection is in the feasible region            
-            if not isInFeasibleRegion(constraints, intersection):
+            if not inFeasibleRegion(constraints, intersection):
                 continue
             plt.plot(intersection[0],intersection[1], 'o', color='black',markersize=4)
-            plt.text(intersection[0],intersection[1], f"({intersection[0]:.2f},{intersection[1]:.2f})", fontsize=8)
+            plt.text(intersection[0],intersection[1], f"({intersection[0]:.1f}, {intersection[1]:.1f})", fontsize=8)
 
 
     d = np.linspace(0, 16, 300)
@@ -207,3 +207,4 @@ def drawGraph(formattedUserInput):
     
     #open graph window
     plt.show()
+
