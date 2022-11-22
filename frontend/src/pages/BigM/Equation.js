@@ -39,6 +39,7 @@ export default function Equation({
               name={`${equation["name"]}_type`}
               className="w-5rem"
               value={equation["type"]}
+              onChange={handleEquation}
             />
           </div>
           <div className="col">
@@ -47,11 +48,12 @@ export default function Equation({
               name={`${equation["name"]}_value`}
               className="w-5rem"
               value={equation["value"]}
+              onChange={handleEquation}
             />
           </div>
           <div className="col">
             <Button
-              label="Delete"
+              label="Delete"  
               icon="pi pi-trash"
               className="p-button-text p-button-danger"
               onClick={() => {deleteConstraint(equation["name"])}}
