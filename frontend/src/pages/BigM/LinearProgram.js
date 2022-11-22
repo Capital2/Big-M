@@ -80,10 +80,10 @@ export default function LinearProgram() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log("data going to be sent to the backend")
-    console.log(userInput)
-  }
+    e.preventDefault();
+    console.log("data going to be sent to the backend");
+    console.log(userInput);
+  };
 
   return (
     <div className="surface-0 p-4">
@@ -91,8 +91,7 @@ export default function LinearProgram() {
         Linear Program User Input
       </div>
       <div className="text-500 mb-5">
-        Morbi tristique blandit turpis. In viverra ligula id nulla hendrerit
-        rutrum.
+        This interface will allow you to set your linear program
       </div>
       <form onSubmit={handleSubmit}>
         <ul className="list-none p-0 m-0">
