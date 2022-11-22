@@ -130,6 +130,8 @@ def drawGraph(formattedUserInput):
         for intersection in intersections:
             maxX = max(maxX, intersection[0])
             maxY = max(maxY, intersection[1])
+        maxX = max(maxX, 10)
+        maxY = max(maxY, 10)
         return (maxX * 1.1, maxY * 1.1)
     
     fig,ax = plt.subplots()
@@ -228,3 +230,4 @@ def drawGraph(formattedUserInput):
     
     #open graph window
     plt.show()
+
