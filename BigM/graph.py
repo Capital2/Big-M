@@ -11,7 +11,7 @@ def drawGraph(formattedUserInput):
         a = objectifCoeff[0]
         b = objectifCoeff[1]
         c = idx
-        x = np.linspace(-30, 30, 2)
+        x = np.linspace(-1000, 3000, 2)
         y=(-a*x + c)/b
         objectif[:] = ax.plot(x, y, '-g', lw=2)
         fig.canvas.draw_idle()   
@@ -22,7 +22,7 @@ def drawGraph(formattedUserInput):
         b = objectifCoeff[1]
         op = "Max" if objectifCoeff[3] == 1 else "Min"
         c = 0
-        x = np.linspace(-30, 30, 2)
+        x = np.linspace(-1000, 3000, 2)
         y=(-a*x + c)/b
         return ax.plot(x, y, '-g',label=f"{op} Z = {a}x+{b}y",lw=2)   
     
@@ -49,7 +49,7 @@ def drawGraph(formattedUserInput):
         elif(b == 0):# y = 0 draw vertical line
                 plt.axvline(x=c/a, color=randomColor, linestyle='-',label=f"{a}x{operator}{c}")
         else:# both x and y !=0 
-            x = np.linspace(0, 30, 2)#generate 2 values for x between 1 and 10
+            x = np.linspace(0, 3000, 2)#generate 2 values for x between 1 and 10
             y=(-a*x + c)/b
             plt.plot(x, y, randomColor,label=f"{a}x+{b}y{operator}{c}")   
 
@@ -115,19 +115,23 @@ def drawGraph(formattedUserInput):
                 continue
             plt.plot(intersection[0],intersection[1], 'o', color='black',markersize=4)
             plt.text(intersection[0],intersection[1], f"({intersection[0]:.1f}, {intersection[1]:.1f})", fontsize=8)
+        
+        return intersections
 
 
-    d = np.linspace(0, 16, 300)
-    x,y = np.meshgrid(d,d)
-    x = np.linspace(0, 16, 300)
+    def getBestAxisScaling(intersections):
+        """
+        Returns the best scaling for the x and y axis
+        """
+        maxX = 0
+        maxY = 0
+        for intersection in intersections:
+            maxX = max(maxX, intersection[0])
+            maxY = max(maxY, intersection[1])
+        return (maxX * 1.1, maxY * 1.1)
     
     fig,ax = plt.subplots()
  
-    plt.xlim(0,16)
-    plt.ylim(0,11)
-    plt.xlabel(r'$x$')
-    plt.ylabel(r'$y$')
-
     #get objectif function (the objectif funtion SHOULD ALWAYS be the last int the formatted user input!)
     objectifCoeff = [row[-1] for row in formattedUserInput]
    
@@ -141,7 +145,19 @@ def drawGraph(formattedUserInput):
         drawConstraint(constraint)
 
     # draw intersection points
-    drawIntersectionPoints(listConstraints)
+    intersections = drawIntersectionPoints(listConstraints)
+
+    bestX, bestY = getBestAxisScaling(intersections)
+    
+    d = np.linspace(0, bestY, 300)
+    x,y = np.meshgrid(d,d)
+    x = np.linspace(0, bestX, 300)
+
+    plt.xlim(0, bestX)
+    plt.ylim(0, bestY)
+    plt.xlabel(r'$x$')
+    plt.ylabel(r'$y$')
+
     filledArea = [] 
 
     for i in listConstraints:
@@ -200,11 +216,13 @@ def drawGraph(formattedUserInput):
     #setup slider
     fig.subplots_adjust(left=0.25, bottom=0.25)
     axfreq = fig.add_axes([0.25, 0.1, 0.65, 0.03])
-    freq_slider = Slider(ax=axfreq, label='move objectif function', valmin=0, valmax=50, valinit=0)
+    
+    # choose the best valmax for the slider
+    valmax = objectifCoeff[0] * bestX + objectifCoeff[1] * bestY
+    freq_slider = Slider(ax=axfreq, label='move objectif function', valmin=0, valmax=valmax, valinit=0)
     
     #listener for changes
     freq_slider.on_changed(update)  
     
     #open graph window
     plt.show()
-
