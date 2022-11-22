@@ -104,11 +104,13 @@ def drawGraph(formattedUserInput,slider=False):
                 a2 = constraints[j][0]
                 b2 = constraints[j][1]
                 c2 = constraints[j][2]
-
-                x = (b2*c1 - b1*c2)/(a1*b2 - a2*b1) 
-                y = (a1*c2 - a2*c1)/(a1*b2 - a2*b1)
-                if x >= 0 and y >= 0:
-                    intersections.add((x,y))
+                try:
+                    x = (b2*c1 - b1*c2)/(a1*b2 - a2*b1) 
+                    y = (a1*c2 - a2*c1)/(a1*b2 - a2*b1)
+                    if x >= 0 and y >= 0:
+                        intersections.add((x,y))
+                except ZeroDivisionError: # parallel lines
+                    pass
         for intersection in intersections:
             # check if intersection is in the feasible region            
             if not inFeasibleRegion(constraints, intersection):
@@ -128,6 +130,8 @@ def drawGraph(formattedUserInput,slider=False):
         for intersection in intersections:
             maxX = max(maxX, intersection[0])
             maxY = max(maxY, intersection[1])
+        maxX = max(maxX, 10)
+        maxY = max(maxY, 10)
         return (maxX * 1.1, maxY * 1.1)
     
     fig,ax = plt.subplots()
@@ -227,3 +231,4 @@ def drawGraph(formattedUserInput,slider=False):
     
     #open graph window
     plt.show()
+
