@@ -242,7 +242,6 @@ def drawGraph(formattedUserInput,slider=False):
         #draw objectif line staticly
         valmax = objectifCoeff[0] * bestX + objectifCoeff[1] * bestY
         DrawObjectifStaticly() 
-     #open graph window
+    
+    #open graph window
     plt.show()
-
-drawGraph([[0,3,1,2],[1,2,0,3],[6,18,4,0],[-1,-1,-1,-1]])
