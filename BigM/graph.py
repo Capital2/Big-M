@@ -134,6 +134,16 @@ def drawGraph(formattedUserInput,slider=False):
         maxY = max(maxY, 10)
         return (maxX * 1.1, maxY * 1.1)
     
+    def DrawObjectifStaticly():
+        a = objectifCoeff[0]
+        b = objectifCoeff[1]
+        x = np.linspace(0, 3000, 2)
+        cRange=np.linspace(0,valmax/2,5)
+        for i in range(0,len(cRange)):
+            y=(-a*x + cRange[i])/b
+            plt.plot(x, y, 'black',linestyle='--')  
+
+
     fig,ax = plt.subplots()
  
     #get objectif function (the objectif funtion SHOULD ALWAYS be the last int the formatted user input!)
@@ -227,8 +237,12 @@ def drawGraph(formattedUserInput,slider=False):
         freq_slider = Slider(ax=axfreq, label='move objectif function', valmin=0, valmax=valmax, valinit=0)
         
         #listener for changes
-        freq_slider.on_changed(update)  
-    
-    #open graph window
+        freq_slider.on_changed(update) 
+    else:
+        #draw objectif line staticly
+        valmax = objectifCoeff[0] * bestX + objectifCoeff[1] * bestY
+        DrawObjectifStaticly() 
+     #open graph window
     plt.show()
 
+drawGraph([[0,3,1,2],[1,2,0,3],[6,18,4,0],[-1,-1,-1,-1]])
