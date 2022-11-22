@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib.widgets import Slider
 
 
-def drawGraph(formattedUserInput):
+def drawGraph(formattedUserInput,slider=False):
 
     def update(val):
         idx = int(freq_slider.val)
@@ -213,16 +213,17 @@ def drawGraph(formattedUserInput):
     plt.grid()
     plt.legend()
     
-    #setup slider
-    fig.subplots_adjust(left=0.25, bottom=0.25)
-    axfreq = fig.add_axes([0.25, 0.1, 0.65, 0.03])
-    
-    # choose the best valmax for the slider
-    valmax = objectifCoeff[0] * bestX + objectifCoeff[1] * bestY
-    freq_slider = Slider(ax=axfreq, label='move objectif function', valmin=0, valmax=valmax, valinit=0)
-    
-    #listener for changes
-    freq_slider.on_changed(update)  
+    if(slider):
+        #setup slider
+        fig.subplots_adjust(left=0.25, bottom=0.25)
+        axfreq = fig.add_axes([0.25, 0.1, 0.65, 0.03])
+        
+        # choose the best valmax for the slider
+        valmax = objectifCoeff[0] * bestX + objectifCoeff[1] * bestY
+        freq_slider = Slider(ax=axfreq, label='move objectif function', valmin=0, valmax=valmax, valinit=0)
+        
+        #listener for changes
+        freq_slider.on_changed(update)  
     
     #open graph window
     plt.show()
