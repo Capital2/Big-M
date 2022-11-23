@@ -128,7 +128,7 @@ __pycache__/
 build/
 develop-eggs/
 dist/
-downloads/
+# downloads/
 eggs/
 .eggs/
 lib/
@@ -315,5 +315,5 @@ cython_debug/
 .ionide
 
 # Support for Project snippet scope
-
+__pycache__/
 # End of https://www.toptal.com/developers/gitignore/api/python,pythonvanilla,visualstudiocode,pydev,pycharm
