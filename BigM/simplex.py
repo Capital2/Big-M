@@ -167,13 +167,13 @@ class Simplex():
 
             # Determine the max coef position
             coef_position = self.__find_equation_coef(iteration)
-            Utilities.debug(coef_position, "The coef position")
+            # Utilities.debug(coef_position, "The coef position")
 
             # Calculating ratio
             iteration["ratio"] = iteration.apply(
                 self.__calculate_ratio, axis=1, args=[coef_position])
             iteration = iteration.round(5)
-            Utilities.debug(iteration, "After calculating the ratio")
+            # Utilities.debug(iteration, "After calculating the ratio")
 
             # Determine the min ratio position
             min_ratio_position = {
@@ -191,12 +191,12 @@ class Simplex():
                 "value": iteration.iloc[pivot_position["row"], pivot_position["col"]],
                 "position": pivot_position
             }
-            Utilities.debug(pivot, "calculating pivot + position")
+            # Utilities.debug(pivot, "calculating pivot + position")
 
             # Perform a transformation of the pivot row to make the pivot value equals to one
             iteration = self.__transform_pivot_row(iteration, pivot)
             iteration = iteration.round(5)
-            Utilities.debug(iteration, "Making the pivot row to 1")
+            # Utilities.debug(iteration, "Making the pivot row to 1")
 
             # Updating the pivot value
             pivot = {
@@ -207,11 +207,11 @@ class Simplex():
             # Perform transformations on the other rows to make all the values of the pivot column
             # except the pivot equal to zero
             iteration = self.__transform_pivot_columns(iteration, pivot)
-            Utilities.debug(iteration, "making the pivot to zeros")
+            # Utilities.debug(iteration, "making the pivot to zeros")
 
             # Verify if we hit the final iteration of the simplex algorithm
             done = self.__verify(iteration)
-            Utilities.debug(done, "simplex stop flag")
+            # Utilities.debug(done, "simplex stop flag")
 
             # Update basic and non basic variables and the iterations list
             bv = self.__update(iteration, bv)
@@ -230,7 +230,7 @@ class Simplex():
             nbv.remove(self.__find_variable_by_name(in_variable[0], nbv))
             bv.append(in_variable)
 
-            Utilities.debug(iteration, "Iteration at the end")
+            # Utilities.debug(iteration, "Iteration at the end")
             iterations.append((iteration.copy(), bv, nbv))
 
             iteration = self.__reset_operations(iteration)

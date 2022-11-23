@@ -236,23 +236,23 @@ class BigM(Simplex):
         """
         # try:
         # Formatted input preconditioning
-        print("formated input:")
-        print(formattedInput)
-        print()
-        input('')
+        # print("formated input:")
+        # print(formattedInput)
+        # print()
+        # input('')
 
         preconditioned_df = self.__preconditioner(formattedInput)
-        print("Preconditioned DataFrame")
-        print(preconditioned_df)
-        print()
-        input('')
+        # print("Preconditioned DataFrame")
+        # print(preconditioned_df)
+        # print()
+        # input('')
        
         # Preparing the matrix for the simplex algorithm
         init_simplex_df = self.__prepare_matrix(preconditioned_df)
-        print("initial simplex matrix")
-        print(init_simplex_df)
-        print()
-        input()
+        # print("initial simplex matrix")
+        # print(init_simplex_df)
+        # print()
+        # input()
 
         # Running the normal simplex algorithm on the matrix
         iterations = super()._perform_simplex(init_simplex_df)
