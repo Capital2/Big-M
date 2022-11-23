@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Chip } from "primereact/chip";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import Equation from "./Equation";
