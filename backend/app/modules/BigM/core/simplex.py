@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-from aliases import Iterations, Variables, Variable
-from utilities import Utilities
+from .aliases import Iterations, Variables, Variable
+from .utilities import Utilities
 from sympy import solve, Eq, symbols
 
 pd.options.mode.chained_assignment = None

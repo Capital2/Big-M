@@ -1,20 +1,40 @@
-/* App custom styling */
-.navBarText{
-    color:white;
-    margin: 10px 10px 10px 10px;
-    font-size: 30px;
-}
-.footer{
-    position: fixed;
-    left:0;
-    bottom:0;
-    right:0;
+html {
+  font-size: 1rem;
 }
 
-.radioLabel{
-    font-size: 25px;
-    vertical-align: text-top;
+body {
+  margin: 0px;
+  height: 100%;
+  padding: 4rem;
+  padding-bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: var(--surface-ground);
+  font-family: var(--font-family);
+  font-weight: normal;
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-.inputfield{
-    width: 50px;
+
+a:link {
+  text-decoration: none;
+  color: black !important;
+}
+
+a:visited {
+  color: black !important;
+}
+
+.App-content {
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.footer {
+  position: fixed; 
+  bottom: 0;  
+  /* right: 64 !important;
+  left: 64 !important; */
+  width: calc(100vw - 145px)
 }
