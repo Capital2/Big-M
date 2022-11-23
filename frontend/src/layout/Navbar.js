@@ -20,13 +20,13 @@ const Navbar = () => {
           height="40"
           className="mr-2 mt-3"
         ></img>
-        <h4 style={{ float: "right", color: "skyblue" }}>Optimisation Project</h4>
+        <h3 className="mr-2 mt-4" style={{ float: "right", color: "skyblue" }}>Big M</h3>
       </Link>
     </>
   );
   const end = (
     <>
-      <a href="https://github.com/MohamedAmineBenAmmar/Numerical-Analysis-Project" target="_blank">
+      <a href="https://github.com/Capital2/Big-M" target="_blank">
         <i className="pi pi-github mr-5" style={{ fontSize: "1.5em" }}></i>
       </a>
     </>
