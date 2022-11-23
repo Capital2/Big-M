@@ -21,7 +21,7 @@ class Utilities:
             return x
 
     @staticmethod
-    def debug(entity: any, msg:str = None):
+    def debug(entity: any, msg: str = None):
         print()
         if msg != None:
             print(msg)
@@ -29,3 +29,12 @@ class Utilities:
         print("*************************************")
         input('press any key to continue.')
         print()
+
+
+equation_type_converter = {
+    1: -2,
+    2: -1,
+    -1: 2,
+    -2: 1,
+    0: 0
+}
