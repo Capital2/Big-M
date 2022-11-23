@@ -4,6 +4,7 @@ import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import Equation from "./Equation";
 import Constraints from "./Constraints";
+import { process } from "../../services";
 
 export default function LinearProgram() {
   const [userInput, setUserInput] = useState({
@@ -38,14 +39,21 @@ export default function LinearProgram() {
       _constraints.push({ ...userInput.constraints[i] });
     }
 
-    for (let i = 0; i < _constraints.length; i++) {
-      if (_constraints[i]["name"] === equationInfo[0]) {
-        _constraints[i][equationInfo[1]] = e.target.value;
-        break;
+    if (equationInfo[0] !== "equation") {
+      for (let i = 0; i < _constraints.length; i++) {
+        if (_constraints[i]["name"] === equationInfo[0]) {
+          _constraints[i][equationInfo[1]] = e.target.value;
+          break;
+        }
       }
-    }
 
-    setUserInput({ ...userInput, constraints: [..._constraints] });
+      setUserInput({ ...userInput, constraints: [..._constraints] });
+    } else {
+      setUserInput({
+        ...userInput,
+        equation: { ...userInput.equation, [equationInfo[1]]: e.target.value },
+      });
+    }
   };
 
   const deleteConstraint = (constraintName) => {
@@ -79,10 +87,14 @@ export default function LinearProgram() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("data going to be sent to the backend");
-    console.log(userInput);
+    try {
+      let res = await process(userInput);
+      console.log(res);
+    } catch (error) {
+      console.log("errors");
+    }
   };
 
   return (

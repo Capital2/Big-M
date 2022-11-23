@@ -1,15 +1,16 @@
 import numpy as np
-from utilities import Utilities
+from .utilities import Utilities
 import pandas as pd
-from simplex import Simplex
-from aliases import Variables, Iterations
+from .simplex import Simplex
+from .aliases import Variables, Iterations
 from math import pow
+
 
 
 class BigM(Simplex):
 
     def __init__(self) -> None:
-        self.m = 10**18
+        self.m = pow(10, 10)
 
     def __clean_preconditioned_df(self, preconditioned_df: pd.DataFrame, rows: list[int], columns: list[str]) -> pd.DataFrame:
         # Dropping rows
