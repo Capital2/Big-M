@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Chip } from "primereact/chip";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import Equation from "./Equation";
 import Constraints from "./Constraints";
 import { process } from "../../services";
+import Iterations from "./Iterations";
 
 export default function LinearProgram() {
+  const [store, setStore] = useState(null);
+
   const [userInput, setUserInput] = useState({
     dimension: { name: "R2", code: 2 },
     equationType: { name: "Maximisation", code: "max" },
@@ -71,6 +74,11 @@ export default function LinearProgram() {
     setUserInput({ ...userInput, constraints: [...filtredConstraints] });
   };
 
+  useEffect(() => {
+    console.log("el store")
+    console.log(store)
+  }, [store])
+
   const addConstraint = () => {
     setUserInput({
       ...userInput,
@@ -90,8 +98,13 @@ export default function LinearProgram() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let res = await process(userInput);
-      console.log(res);
+      process(userInput)
+        .then((res) => {
+          setStore(res);
+        })
+        .catch((err) => {
+          console.log("errors");
+        });
     } catch (error) {
       console.log("errors");
     }
@@ -182,6 +195,17 @@ export default function LinearProgram() {
           </li>
         </ul>
       </form>
+      {store != null && (
+        <>
+          {store.columns != null && store.data != null && (
+            <>
+              <div className="font-medium text-3xl text-900 mb-3">Output</div>
+              {/* <Iterations columns={(response.columns) != undefined ? (response.columns) : ([])} iterations={(response.data != undefined) ? (response.data) : ([])} /> */}
+              <Iterations columns={store.columns} iterations={store.data} />
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 }

@@ -10,4 +10,6 @@ router = APIRouter(
 async def process(req_body: dict):
     formatted_data = BigM_controller.format_data(req_body)
     iterations = BigM_controller.perform_BigM(formatted_data)
-    return iterations
+    response = BigM_controller.format_result(iterations)
+    print(response)
+    return response

@@ -9,7 +9,7 @@ from math import pow
 class BigM(Simplex):
 
     def __init__(self) -> None:
-        self.m = 10**18
+        self.m = 10**9
 
     def __clean_preconditioned_df(self, preconditioned_df: pd.DataFrame, rows: list[int], columns: list[str]) -> pd.DataFrame:
         # Dropping rows
@@ -236,23 +236,23 @@ class BigM(Simplex):
         """
         # try:
         # Formatted input preconditioning
-        # print("formated input:")
-        # print(formattedInput)
-        # print()
-        # input('')
+        print("formated input:")
+        print(formattedInput)
+        print()
+        input('')
 
         preconditioned_df = self.__preconditioner(formattedInput)
-        # print("Preconditioned DataFrame")
-        # print(preconditioned_df)
-        # print()
-        # input('')
+        print("Preconditioned DataFrame")
+        print(preconditioned_df)
+        print()
+        input('')
        
         # Preparing the matrix for the simplex algorithm
         init_simplex_df = self.__prepare_matrix(preconditioned_df)
-        # print("initial simplex matrix")
-        # print(init_simplex_df)
-        # print()
-        # input()
+        print("initial simplex matrix")
+        print(init_simplex_df)
+        print()
+        input()
 
         # Running the normal simplex algorithm on the matrix
         iterations = super()._perform_simplex(init_simplex_df)

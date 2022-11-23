@@ -5,7 +5,7 @@ import LinearProgram from './LinearProgram'
 export default function index() {
   return (
     <>
-      <Stats />
+      {/* <Stats /> */}
       <LinearProgram />
     </>
   )
