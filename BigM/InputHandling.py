@@ -133,7 +133,7 @@ def validateUserInput(input):
         return False
    
     #match regEx for constraints
-    matchConstraint = re.findall("^[-]{0,1}[0-9]*[x|y|z|]([+|-][0-9]*[x|y|z])*(<|>|<=|>=|=)[0-9]+$",strippedInput)
+    matchConstraint = re.findall("^[-]{0,1}[0-9]*[x|y|z|]([+|-][0-9]*[x|y|z])*(<|>|<=|>=|=)[-]{0,1}[0-9]+$",strippedInput)
     if(len(matchConstraint)!=0):
         return True
     
