@@ -1,5 +1,5 @@
 import numpy as np
-from utilities import Utilities
+from utilities import Utilities, equation_type_converter
 import pandas as pd
 from simplex import Simplex
 from aliases import Variables, Iterations
@@ -19,6 +19,24 @@ class BigM(Simplex):
         preconditioned_df.drop(columns, axis=1, inplace=True)
 
         return preconditioned_df
+
+    def __handle_negative_constraints(self, preconditioned_matrix: np.matrix) -> np.matrix:
+        # print("before modification")
+        # print(preconditioned_matrix)
+        # input()
+        for j in range(0, preconditioned_matrix.shape[1] - 1):
+            if preconditioned_matrix.item((preconditioned_matrix.shape[0] - 2, j)) < 0:
+                for i in range(0, preconditioned_matrix.shape[0] - 1):
+                    preconditioned_matrix.itemset(
+                        (i, j), preconditioned_matrix.item((i, j)) * -1)
+                preconditioned_matrix.itemset(
+                    (preconditioned_matrix.shape[0] - 1, j), equation_type_converter[preconditioned_matrix.item((preconditioned_matrix.shape[0] - 1, j))])
+
+        # print("after modification")
+        # print(preconditioned_matrix)
+        # input()
+
+        return preconditioned_matrix
 
     def __determine_coefs(self, preconditioned_matrix: np.matrix) -> list[str]:
         coefs = []
@@ -83,6 +101,9 @@ class BigM(Simplex):
         # Copy the formattedInput to the preconditioned_matrix (data is backuped in the formattedInput + avoid refrence access)
         preconditioned_matrix = formattedInput.copy()
 
+        # Handle negative constraints
+        preconditioned_matrix = self.__handle_negative_constraints(preconditioned_matrix)
+
         # Initialize a new column with -1 values (by default) to determine later on
         # if a variable is a slack or artificial variable
         variable_flag_col = []
@@ -93,6 +114,7 @@ class BigM(Simplex):
 
         # print("1st version of the preconditioned matrix:")
         # print(preconditioned_matrix)
+        # input()
 
         # Initilize default row that is going to modified based on the
         # the slack and artificial variables positions in the system
@@ -134,6 +156,7 @@ class BigM(Simplex):
 
         # print("2sec version of the preconditioned matrix:")
         # print(preconditioned_matrix)
+        # input()
 
         # Adding the P coef + making modifications to max / min equation
         preconditioned_matrix = self.__transform_equation(
@@ -194,19 +217,21 @@ class BigM(Simplex):
         """
         objectiveFunctionRow = preconditioned_df.shape[0] - 1
         newChange = True
-        while newChange: # idk if that's necessary but meh
+        while newChange:  # idk if that's necessary but meh
             newChange = False
-            for col in preconditioned_df.filter(regex="a\d").columns: # loop through the artificial variables columns
-                if preconditioned_df.loc[objectiveFunctionRow][col] != 0: # if last rows column of artificial variable contains M
+            # loop through the artificial variables columns
+            for col in preconditioned_df.filter(regex="a\d").columns:
+                # if last rows column of artificial variable contains M
+                if preconditioned_df.loc[objectiveFunctionRow][col] != 0:
                     for row in range(0, preconditioned_df.shape[0] - 1):
                         if preconditioned_df.loc[row][col] != 0:
                             # we can perform operations between this row and the last row
                             # to get rid of the M
-                            preconditioned_df = self.__perform_operations(preconditioned_df, row, objectiveFunctionRow, col)
+                            preconditioned_df = self.__perform_operations(
+                                preconditioned_df, row, objectiveFunctionRow, col)
                             newChange = True
 
         return preconditioned_df
-
 
     def __perform_operations(self, preconditioned_df: pd.DataFrame, row: int, objectiveFunctionRow: int, col: str) -> pd.DataFrame:
         """
@@ -220,9 +245,12 @@ class BigM(Simplex):
         Returns:
             A pandas DataFrame after performing the operations.
         """
-        operation = -preconditioned_df.loc[objectiveFunctionRow][col] / preconditioned_df.loc[row][col] # quick meth, trivial
-        for column in preconditioned_df.columns: # loop through the columns to do chaka laka boom boom between the rows
-            preconditioned_df.loc[objectiveFunctionRow][column] += operation * preconditioned_df.loc[row][column]
+        operation = -preconditioned_df.loc[objectiveFunctionRow][col] / \
+            preconditioned_df.loc[row][col]  # quick meth, trivial
+        # loop through the columns to do chaka laka boom boom between the rows
+        for column in preconditioned_df.columns:
+            preconditioned_df.loc[objectiveFunctionRow][column] += operation * \
+                preconditioned_df.loc[row][column]
         return preconditioned_df
 
     def runBigM(self, formattedInput: np.matrix) -> Iterations:
@@ -246,7 +274,7 @@ class BigM(Simplex):
         # print(preconditioned_df)
         # print()
         # input('')
-       
+
         # Preparing the matrix for the simplex algorithm
         init_simplex_df = self.__prepare_matrix(preconditioned_df)
         # print("initial simplex matrix")
