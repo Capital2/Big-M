@@ -102,7 +102,12 @@ A uni project with the goal of creating a Big M solver for linear programming pr
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Follow these steps to use Big-M
+Follow these steps to use the fullstack Big-M.
+
+Our Big M package is available on pypi via
+```sh
+pip install BigM
+```
 
 ### Prerequisites
 
@@ -138,9 +143,15 @@ if you're going to only use the package Bigm, these steps are optional
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-The Big M package is installable once you have cloned the repo with:
-```sh
-pip install .
+```python
+from BigM import BigM
+from BigM import graph
+from BigM import InputHandling
+
+lp = ["Max Z = x+5y","6x+5y<=60","x+2y<=14", "x<=9"]
+
+bm = BigM.BigM()
+results = bm.runBigM(InputHandling.formatUserInput(lp))
 ```
 
 
