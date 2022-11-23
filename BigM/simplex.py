@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from aliases import Iterations, Variables, Variable
 from utilities import Utilities
-from sympy import solve, Eq, symbols
+# from sympy import solve, Eq, symbols
 
 pd.options.mode.chained_assignment = None
 
@@ -152,8 +152,13 @@ class Simplex():
         iteration['operations'] = operations
         iterations: Iterations = []
         iterations.append((iteration.copy(), bv, nbv))
+        
+        iterations_nbr = 0
         done = False
         while not done:
+            iterations_nbr+= 1
+            if iterations_nbr == 100 and not done:
+                raise ValueError('Le programme linéaire ne converge pas.')
             # Utilities.debug(iteration, "Iteration at the start")
 
             # Determine the max coef position
