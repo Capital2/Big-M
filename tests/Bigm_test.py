@@ -18,9 +18,11 @@ class TestIH(unittest.TestCase):
                 np.matrix([ [3, 4, 1, -4], [-1, 20, -1, 3], [1, -1, 1, 1], [40, 1, 5, 0], [-2, 0, 2, 0] ]),
                 np.matrix([ [5, 7, 1, -4], [-2, 200, -3, -9], [2, -1, -2, -2], [40, 1, 5, 0], [-2, 0, 0, 0] ])]
         for test in tests:
-            self.bm.runBigM(test)
-            # TODO assert dominance ha
-
+            try:
+                self.bm.runBigM(test)
+                # TODO assert dominance ha
+            except Exception as error:
+                print(error)
         
 if __name__ == '__main__':
     unittest.main()
