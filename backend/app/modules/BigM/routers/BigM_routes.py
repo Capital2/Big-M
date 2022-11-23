@@ -6,7 +6,8 @@ router = APIRouter(
     prefix='/BigM',
 )
 
-@router.post("/test")
-# , response_model=Token
-async def test():
-    return BigM_controller.test_method()
+@router.post("/process")
+async def process(req_body: dict):
+    formatted_data = BigM_controller.format_data(req_body)
+    iterations = BigM_controller.perform_BigM(formatted_data)
+    return iterations
