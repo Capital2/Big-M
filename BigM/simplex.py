@@ -156,10 +156,14 @@ class Simplex():
         iterations_nbr = 0
         done = False
         while not done:
+
+            # Utilities.debug(iteration, "Iteration at the start")
+
             iterations_nbr+= 1
             if iterations_nbr == 100 and not done:
                 raise ValueError('Le programme linéaire ne converge pas.')
             # Utilities.debug(iteration, "Iteration at the start")
+
 
             # Determine the max coef position
             coef_position = self.__find_equation_coef(iteration)

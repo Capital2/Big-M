@@ -27,9 +27,9 @@ def main():
     for iteration in iterations:
         display_iteration(iteration)
 
-    print("sensibilty analysis")
-    big_m.sensibility_analysis(iterations)
-    print("sss")
+    # print("sensibilty analysis")
+    # big_m.sensibility_analysis(iterations)
+    # print("sss")
     
 
 
