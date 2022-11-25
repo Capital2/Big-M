@@ -31,7 +31,7 @@ def drawGraph(formattedUserInput,slider=False):
         a = objectifCoeff[0]
         b = objectifCoeff[1]
         c = idx
-        x = np.linspace(-10, 30, 2)
+        x = np.linspace(-1000, 3000, 2)
         y=(-a*x + c)/b
         objectif[:] = ax.plot(x, y, '-g', lw=2)
         fig.canvas.draw_idle()   
