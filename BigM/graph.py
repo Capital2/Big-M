@@ -171,7 +171,10 @@ def drawGraph(formattedUserInput,slider=False):
 
     def colorFeasibleRegion():  
         for i in listConstraints:
-            a, b, c, operator = i
+            a = i[0]
+            b = i[1]
+            c = i[2]
+            operator = i[3]
             if(a == 0):
                 match operator:
                     case 0:
