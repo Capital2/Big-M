@@ -151,7 +151,11 @@ from BigM import InputHandling
 lp = ["Max Z = x+5y","6x+5y<=60","x+2y<=14", "x<=9"]
 
 bm = BigM.BigM()
-results = bm.runBigM(InputHandling.formatUserInput(lp))
+formattedInput = InputHandling.formatUserInput(lp)
+
+results = bm.runBigM(formattedInput)
+InputHandling.formatUserInput(lp)
+graph.drawGraph(formattedInput, slider=True)
 ```
 
 
