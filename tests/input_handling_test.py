@@ -35,11 +35,11 @@ class TestIH(unittest.TestCase):
         self.assertEqual(InputHandling.formatUserInput(testcase4[0]), testcase4[1])
 
     def test_drawGraph(self):
-        tests = [np.matrix([[1, 1, 0, 1], [1, 0, 1, -1], [0, 1, 1, 3],[20, 5, 10, 0], [-2, 0, 2, 0]]),
-        np.matrix([ [3, 1, 1, 200], [2, 2, 1, 300], [600, 400, 225, 0], [0, -2, -2, 0] ]),
-        np.matrix([ [4, 1, 0, 3], [1, 1, 1, 2], [1, 0, 1, 6], [100, 40, 30, 0], [-2, 2, -2, 0] ]),
-        np.matrix([ [3, 4, 1, -4], [-1, 20, -1, 3], [1, -1, 1, 1], [40, 1, 5, 0], [-2, 0, 2, 0] ]),
-        np.matrix([ [5, 7, 1, -4], [-2, 200, -3, -9], [2, -1, -2, -2], [40, 1, 5, 0], [-2, 0, 0, 0] ])]
+        tests = [np.array([[1, 1, 0, 1], [1, 0, 1, -1], [0, 1, 1, 3],[20, 5, 10, 0], [-2, 0, 2, 0]]),
+        np.array([ [3, 1, 1, 200], [2, 2, 1, 300], [600, 400, 225, 0], [0, -2, -2, 0] ]),
+        np.array([ [4, 1, 0, 3], [1, 1, 1, 2], [1, 0, 1, 6], [100, 40, 30, 0], [-2, 2, -2, 0] ]),
+        np.array([ [3, 4, 1, -4], [-1, 20, -1, 3], [1, -1, 1, 1], [40, 1, 5, 0], [-2, 0, 2, 0] ]),
+        np.array([ [5, 7, 1, -4], [-2, 200, -3, -9], [2, -1, -2, -2], [40, 1, 5, 0], [-2, 0, 0, 0] ])]
         # A way of testing the draw func, is that we test whether the show function have been
         # called or not relying on the fact that the show() func is usually called at the end of 
         # the drawGraph func.
