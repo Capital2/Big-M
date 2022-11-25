@@ -7,7 +7,6 @@ def drawGraph(formattedUserInput,slider=False):
 
     def update_annot(ind):
         pos = points.get_offsets()[ind["ind"][0]]
-        print(pos)
         annot.xy = pos
         text = f" {pos[0],pos[1]}"
         annot.set_text(text)
@@ -278,4 +277,3 @@ def drawGraph(formattedUserInput,slider=False):
     fig.canvas.mpl_connect("motion_notify_event", onIntersectionHover)
     #open graph window
     plt.show()
-drawGraph([[0,1,3,2],[1,0,2,3],[6,4,18,0],[-2,-2,-2,0]],slider=True)
