@@ -147,14 +147,15 @@ if you're going to only use the package Bigm, these steps are optional
 from BigM import BigM
 from BigM import graph
 from BigM import InputHandling
+import numpy as np
 
 lp = ["Max Z = x+5y","6x+5y<=60","x+2y<=14", "x<=9"]
 
 bm = BigM.BigM()
-formattedInput = InputHandling.formatUserInput(lp)
+formattedInput = np.array(InputHandling.formatUserInput(lp))
 
 results = bm.runBigM(formattedInput)
-InputHandling.formatUserInput(lp)
+
 graph.drawGraph(formattedInput, slider=True)
 ```
 
