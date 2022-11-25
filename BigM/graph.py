@@ -176,38 +176,47 @@ def drawGraph(formattedUserInput,slider=False):
             c = i[2]
             operator = i[3]
             if(a == 0):
-                if(operator == 0):
-                    filledArea.append(b*y==c)
-                elif(operator == 1):
-                    filledArea.append(b*y>c)
-                elif(operator == -1):
-                    filledArea.append(b*y<c)
-                elif(operator == 2):
-                    filledArea.append(b*y>=c)
-                elif(operator == -2):
-                    filledArea.append(b*y<=c)
+                match operator:
+                    case 0:
+                        filledArea.append(b*y==c)
+                    case 1 :
+                        filledArea.append(b*y>c)
+                    case -1 :
+                        filledArea.append(b*y<c)
+                    case 2 :
+                        filledArea.append(b*y>=c)
+                    case -2 :
+                        filledArea.append(b*y<=c)
+                    case _:
+                        raise ValueError(f"received {operator} which is not in [0, 1, -1, 2, -2]")
             if(b == 0):
-                if(operator == 0):
-                    filledArea.append(a*x==c)
-                elif(operator == 1):
-                    filledArea.append(a*x>c)
-                elif(operator == -1):
-                    filledArea.append(a*x<c)
-                elif(operator == 2):
-                    filledArea.append(a*x>=c)
-                elif(operator == -2):
-                    filledArea.append(a*x<=c)
+                match operator:
+                    case 0 :
+                        filledArea.append(a*x==c)
+                    case 1 :
+                        filledArea.append(a*x>c)
+                    case -1 :
+                        filledArea.append(a*x<c)
+                    case 2 :
+                        filledArea.append(a*x>=c)
+                    case -2 :
+                        filledArea.append(a*x<=c)
+                    case _:
+                        raise ValueError(f"received {operator} which is not in [0, 1, -1, 2, -2]")
             else:
-                if(operator == 0):
-                    filledArea.append(b*y==c-a*x)
-                elif(operator == 1):
-                    filledArea.append(b*y>c-a*x)
-                elif(operator == -1):
-                    filledArea.append(b*y<c-a*x)
-                elif(operator == 2):
-                    filledArea.append(b*y>=c-a*x)
-                elif(operator == -2):
-                    filledArea.append(b*y<=c-a*x)
+                match operator:
+                    case 0 :
+                        filledArea.append(b*y==c-a*x)
+                    case 1 :
+                        filledArea.append(b*y>c-a*x)
+                    case -1 :
+                        filledArea.append(b*y<c-a*x)
+                    case 2 :
+                        filledArea.append(b*y>=c-a*x)
+                    case -2 :
+                        filledArea.append(b*y<=c-a*x)
+                    case _:
+                        raise ValueError(f"received {operator} which is not in [0, 1, -1, 2, -2]")
     fig,ax = plt.subplots()
 
     #get objectif function (the objectif funtion SHOULD ALWAYS be the last int the formatted user input!)
