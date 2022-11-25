@@ -5,18 +5,38 @@ from matplotlib.widgets import Slider
 
 def drawGraph(formattedUserInput,slider=False):
 
-    def update(val):
-        idx = int(freq_slider.val)
+    def update_annot(ind):
+        pos = points.get_offsets()[ind["ind"][0]]
+        print(pos)
+        annot.xy = pos
+        text = f" {pos[0],pos[1]}"
+        annot.set_text(text)
+    
+
+    def onIntersectionHover(event):
+        vis = annot.get_visible()
+        if event.inaxes == ax:
+            cont, ind = points.contains(event)
+            if cont:
+                update_annot(ind)
+                annot.set_visible(True)
+                fig.canvas.draw_idle()
+            else:
+                if vis:
+                    annot.set_visible(False)
+                    fig.canvas.draw_idle()
+
+    def updateObjectif(val):
+        idx = float(freq_slider.val)
         ax.lines.remove(objectif[0])
         a = objectifCoeff[0]
         b = objectifCoeff[1]
         c = idx
-        x = np.linspace(-1000, 3000, 2)
+        x = np.linspace(-10, 30, 2)
         y=(-a*x + c)/b
         objectif[:] = ax.plot(x, y, '-g', lw=2)
         fig.canvas.draw_idle()   
 
-    
     def drawObjectif():
         a = objectifCoeff[0]
         b = objectifCoeff[1]
@@ -111,14 +131,21 @@ def drawGraph(formattedUserInput,slider=False):
                         intersections.add((x,y))
                 except ZeroDivisionError: # parallel lines
                     pass
+        xList=[]
+        ylist=[]
+
         for intersection in intersections:
             # check if intersection is in the feasible region            
             if not inFeasibleRegion(constraints, intersection):
                 continue
-            plt.plot(intersection[0],intersection[1], 'o', color='black',markersize=4)
-            plt.text(intersection[0],intersection[1], f"({intersection[0]:.1f}, {intersection[1]:.1f})", fontsize=8)
+            #save x and y of each valid intersection point 
+            xList.append(intersection[0])
+            ylist.append(intersection[1])
+            
+        #pass the list of x and y to scatter them
+        points=plt.scatter(xList,ylist)
         
-        return intersections
+        return intersections,points
 
 
     def getBestAxisScaling(intersections):
@@ -143,9 +170,47 @@ def drawGraph(formattedUserInput,slider=False):
             y=(-a*x + cRange[i])/b
             plt.plot(x, y, 'black',linestyle='--')  
 
-
+    def colorFeasibleRegion():  
+        for i in listConstraints:
+            a = i[0]
+            b = i[1]
+            c = i[2]
+            operator = i[3]
+            if(a == 0):
+                if(operator == 0):
+                    filledArea.append(b*y==c)
+                elif(operator == 1):
+                    filledArea.append(b*y>c)
+                elif(operator == -1):
+                    filledArea.append(b*y<c)
+                elif(operator == 2):
+                    filledArea.append(b*y>=c)
+                elif(operator == -2):
+                    filledArea.append(b*y<=c)
+            if(b == 0):
+                if(operator == 0):
+                    filledArea.append(a*x==c)
+                elif(operator == 1):
+                    filledArea.append(a*x>c)
+                elif(operator == -1):
+                    filledArea.append(a*x<c)
+                elif(operator == 2):
+                    filledArea.append(a*x>=c)
+                elif(operator == -2):
+                    filledArea.append(a*x<=c)
+            else:
+                if(operator == 0):
+                    filledArea.append(b*y==c-a*x)
+                elif(operator == 1):
+                    filledArea.append(b*y>c-a*x)
+                elif(operator == -1):
+                    filledArea.append(b*y<c-a*x)
+                elif(operator == 2):
+                    filledArea.append(b*y>=c-a*x)
+                elif(operator == -2):
+                    filledArea.append(b*y<=c-a*x)
     fig,ax = plt.subplots()
- 
+
     #get objectif function (the objectif funtion SHOULD ALWAYS be the last int the formatted user input!)
     objectifCoeff = [row[-1] for row in formattedUserInput]
    
@@ -159,10 +224,14 @@ def drawGraph(formattedUserInput,slider=False):
         drawConstraint(constraint)
 
     # draw intersection points
-    intersections = drawIntersectionPoints(listConstraints)
+    intersections, points = drawIntersectionPoints(listConstraints)
 
     bestX, bestY = getBestAxisScaling(intersections)
-    
+   
+    #initialze annotation
+    annot = ax.annotate("", xy=(0,0), xytext=(20,20),textcoords="offset points",bbox=dict(boxstyle="round", fc="w"),arrowprops=dict(arrowstyle="->"))
+    annot.set_visible(False)
+
     d = np.linspace(0, bestY, 300)
     x,y = np.meshgrid(d,d)
     x = np.linspace(0, bestX, 300)
@@ -174,44 +243,7 @@ def drawGraph(formattedUserInput,slider=False):
 
     filledArea = [] 
 
-    for i in listConstraints:
-        a = i[0]
-        b = i[1]
-        c = i[2]
-        operator = i[3]
-        if(a == 0):
-            if(operator == 0):
-                filledArea.append(b*y==c)
-            elif(operator == 1):
-                filledArea.append(b*y>c)
-            elif(operator == -1):
-                filledArea.append(b*y<c)
-            elif(operator == 2):
-                filledArea.append(b*y>=c)
-            elif(operator == -2):
-                filledArea.append(b*y<=c)
-        if(b == 0):
-            if(operator == 0):
-                filledArea.append(a*x==c)
-            elif(operator == 1):
-                filledArea.append(a*x>c)
-            elif(operator == -1):
-                filledArea.append(a*x<c)
-            elif(operator == 2):
-                filledArea.append(a*x>=c)
-            elif(operator == -2):
-               filledArea.append(a*x<=c)
-        else:
-            if(operator == 0):
-                filledArea.append(b*y==c-a*x)
-            elif(operator == 1):
-                filledArea.append(b*y>c-a*x)
-            elif(operator == -1):
-                filledArea.append(b*y<c-a*x)
-            elif(operator == 2):
-                filledArea.append(b*y>=c-a*x)
-            elif(operator == -2):
-                filledArea.append(b*y<=c-a*x)
+    colorFeasibleRegion()
 
     calculate = filledArea[0]
     
@@ -234,14 +266,16 @@ def drawGraph(formattedUserInput,slider=False):
         
         # choose the best valmax for the slider
         valmax = objectifCoeff[0] * bestX + objectifCoeff[1] * bestY
-        freq_slider = Slider(ax=axfreq, label='move objectif function', valmin=0, valmax=valmax, valinit=0)
+        freq_slider = Slider(ax=axfreq, label='Z=', valmin=0, valmax=valmax, valinit=0,valstep=0.2,)
         
         #listener for changes
-        freq_slider.on_changed(update) 
+        freq_slider.on_changed(updateObjectif) 
     else:
         #draw objectif line staticly
         valmax = objectifCoeff[0] * bestX + objectifCoeff[1] * bestY
         DrawObjectifStaticly() 
     
+    fig.canvas.mpl_connect("motion_notify_event", onIntersectionHover)
     #open graph window
     plt.show()
+drawGraph([[0,1,3,2],[1,0,2,3],[6,4,18,0],[-2,-2,-2,0]],slider=True)
