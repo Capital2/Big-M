@@ -171,10 +171,7 @@ def drawGraph(formattedUserInput,slider=False):
 
     def colorFeasibleRegion():  
         for i in listConstraints:
-            a = i[0]
-            b = i[1]
-            c = i[2]
-            operator = i[3]
+            a, b, c, operator = i
             if(a == 0):
                 match operator:
                     case 0:
@@ -217,6 +214,8 @@ def drawGraph(formattedUserInput,slider=False):
                         filledArea.append(b*y<=c-a*x)
                     case _:
                         raise ValueError(f"received {operator} which is not in [0, 1, -1, 2, -2]")
+
+
     fig,ax = plt.subplots()
 
     #get objectif function (the objectif funtion SHOULD ALWAYS be the last int the formatted user input!)
