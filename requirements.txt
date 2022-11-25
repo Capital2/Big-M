@@ -36,8 +36,10 @@ watchfiles==0.18.1
 websockets==10.4
 
 matplotlib==3.6.0
-# for the jupyter nb
-ipympl==0.9.2
-nbformat==5.7.0
+mock==4.0.3
+mpmath==1.2.1
+numpy==1.23.4
+packaging==21.3
+pandas==1.5.1
 Pillow==9.3.0
 pyqt5==5.15.7
