@@ -285,4 +285,3 @@ def drawGraph(formattedUserInput,slider=False):
     fig.canvas.mpl_connect("motion_notify_event", onIntersectionHover)
     #open graph window
     plt.show()
-drawGraph([ [4, 1, 0, 3], [1, 1, 1, 2], [1, 0, 1, 6], [100, 40, 30, 0], [-2, 2, -2, 0] ],slider=True)
