@@ -11,7 +11,6 @@ def drawGraph(formattedUserInput,slider=False):
         text = f" {pos[0],pos[1]}"
         annot.set_text(text)
     
-
     def onIntersectionHover(event):
         vis = annot.get_visible()
         if event.inaxes == ax:
@@ -44,8 +43,7 @@ def drawGraph(formattedUserInput,slider=False):
         x = np.linspace(-1000, 3000, 2)
         y=(-a*x + c)/b
         return ax.plot(x, y, '-g',label=f"{op} Z = {a}x+{b}y",lw=2)   
-    
-        
+            
     def drawConstraint(constraint):
         # ax + by = c
         a = constraint[0]
@@ -71,7 +69,6 @@ def drawGraph(formattedUserInput,slider=False):
             x = np.linspace(0, 3000, 2)#generate 2 values for x between 1 and 10
             y=(-a*x + c)/b
             plt.plot(x, y, randomColor,label=f"{a}x+{b}y{operator}{c}")   
-
 
     def inFeasibleRegion(constraints, point):
         """
@@ -99,7 +96,6 @@ def drawGraph(formattedUserInput,slider=False):
             elif constraint[3] == 0 and operation != c: # =
                 return False
         return True
-
 
     def drawIntersectionPoints(constraints):
         """
@@ -145,7 +141,6 @@ def drawGraph(formattedUserInput,slider=False):
         points=plt.scatter(xList,ylist)
         
         return intersections,points
-
 
     def getBestAxisScaling(intersections):
         """
@@ -218,6 +213,8 @@ def drawGraph(formattedUserInput,slider=False):
                     case _:
                         raise ValueError(f"received {operator} which is not in [0, 1, -1, 2, -2]")
 
+    if(len(formattedUserInput) != 4):
+        raise Exception("You need to pass exactly two variables")
 
     fig,ax = plt.subplots()
 
@@ -288,3 +285,4 @@ def drawGraph(formattedUserInput,slider=False):
     fig.canvas.mpl_connect("motion_notify_event", onIntersectionHover)
     #open graph window
     plt.show()
+drawGraph([ [4, 1, 0, 3], [1, 1, 1, 2], [1, 0, 1, 6], [100, 40, 30, 0], [-2, 2, -2, 0] ],slider=True)
