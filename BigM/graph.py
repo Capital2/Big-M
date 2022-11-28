@@ -165,7 +165,7 @@ def drawGraph(formattedUserInput,slider=False):
             plt.plot(x, y, 'black',linestyle='--')  
 
     def fillingGrid(listConstraints,y):  
-        feasibleArea = []
+        grid = []
         for i in listConstraints:
             a = i[0]
             b = i[1]
@@ -174,46 +174,46 @@ def drawGraph(formattedUserInput,slider=False):
             if(a == 0):
                 match operator:
                     case 0:
-                        feasibleArea.append(b*y==c)  
+                        grid.append(b*y==c)  
                     case 1 :
-                        feasibleArea.append(b*y>c)
+                        grid.append(b*y>c)
                     case -1 :
-                        feasibleArea.append(b*y<c)
+                        grid.append(b*y<c)
                     case 2 :
-                        feasibleArea.append(b*y>=c)
+                        grid.append(b*y>=c)
                     case -2 :
-                        feasibleArea.append(b*y<=c)
+                        grid.append(b*y<=c)
                     case _:
                         raise ValueError(f"received {operator} which is not in [0, 1, -1, 2, -2]")
             elif(b == 0):
                 match operator:
                     case 0 :
-                        feasibleArea.append(a*x==c)
+                        grid.append(a*x==c)
                     case 1 :
-                        feasibleArea.append(a*x>c)
+                        grid.append(a*x>c)
                     case -1 :
-                        feasibleArea.append(a*x<c)
+                        grid.append(a*x<c)
                     case 2 :
-                        feasibleArea.append(a*x>=c)
+                        grid.append(a*x>=c)
                     case -2 :
-                        feasibleArea.append(a*x<=c)
+                        grid.append(a*x<=c)
                     case _:
                         raise ValueError(f"received {operator} which is not in [0, 1, -1, 2, -2]")
             else:
                 match operator:
                     case 0 :
-                        feasibleArea.append(b*y==c-a*x)
+                        grid.append(b*y==c-a*x)
                     case 1 :
-                        feasibleArea.append(b*y>c-a*x)
+                        grid.append(b*y>c-a*x)
                     case -1 :
-                        feasibleArea.append(b*y<c-a*x)
+                        grid.append(b*y<c-a*x)
                     case 2 :
-                        feasibleArea.append(b*y>=c-a*x)
+                        grid.append(b*y>=c-a*x)
                     case -2 :
-                        feasibleArea.append(b*y<=c-a*x)
+                        grid.append(b*y<=c-a*x)
                     case _:
                         raise ValueError(f"received {operator} which is not in [0, 1, -1, 2, -2]")
-        return feasibleArea
+        return grid
 
     if(len(formattedUserInput) != 4):
         raise ValueError("You need to pass exactly two variables")
