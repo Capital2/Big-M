@@ -164,7 +164,8 @@ def drawGraph(formattedUserInput,slider=False):
             y=(-a*x + cRange[i])/b
             plt.plot(x, y, 'black',linestyle='--')  
 
-    def colorFeasibleRegion():  
+    def fillingGrid(listConstraints,y):  
+        feasibleArea = []
         for i in listConstraints:
             a = i[0]
             b = i[1]
@@ -173,48 +174,49 @@ def drawGraph(formattedUserInput,slider=False):
             if(a == 0):
                 match operator:
                     case 0:
-                        filledArea.append(b*y==c)
+                        feasibleArea.append(b*y==c)  
                     case 1 :
-                        filledArea.append(b*y>c)
+                        feasibleArea.append(b*y>c)
                     case -1 :
-                        filledArea.append(b*y<c)
+                        feasibleArea.append(b*y<c)
                     case 2 :
-                        filledArea.append(b*y>=c)
+                        feasibleArea.append(b*y>=c)
                     case -2 :
-                        filledArea.append(b*y<=c)
+                        feasibleArea.append(b*y<=c)
                     case _:
                         raise ValueError(f"received {operator} which is not in [0, 1, -1, 2, -2]")
-            if(b == 0):
+            elif(b == 0):
                 match operator:
                     case 0 :
-                        filledArea.append(a*x==c)
+                        feasibleArea.append(a*x==c)
                     case 1 :
-                        filledArea.append(a*x>c)
+                        feasibleArea.append(a*x>c)
                     case -1 :
-                        filledArea.append(a*x<c)
+                        feasibleArea.append(a*x<c)
                     case 2 :
-                        filledArea.append(a*x>=c)
+                        feasibleArea.append(a*x>=c)
                     case -2 :
-                        filledArea.append(a*x<=c)
+                        feasibleArea.append(a*x<=c)
                     case _:
                         raise ValueError(f"received {operator} which is not in [0, 1, -1, 2, -2]")
             else:
                 match operator:
                     case 0 :
-                        filledArea.append(b*y==c-a*x)
+                        feasibleArea.append(b*y==c-a*x)
                     case 1 :
-                        filledArea.append(b*y>c-a*x)
+                        feasibleArea.append(b*y>c-a*x)
                     case -1 :
-                        filledArea.append(b*y<c-a*x)
+                        feasibleArea.append(b*y<c-a*x)
                     case 2 :
-                        filledArea.append(b*y>=c-a*x)
+                        feasibleArea.append(b*y>=c-a*x)
                     case -2 :
-                        filledArea.append(b*y<=c-a*x)
+                        feasibleArea.append(b*y<=c-a*x)
                     case _:
                         raise ValueError(f"received {operator} which is not in [0, 1, -1, 2, -2]")
+        return feasibleArea
 
     if(len(formattedUserInput) != 4):
-        raise Exception("You need to pass exactly two variables")
+        raise ValueError("You need to pass exactly two variables")
 
     fig,ax = plt.subplots()
 
@@ -222,6 +224,7 @@ def drawGraph(formattedUserInput,slider=False):
     objectifCoeff = [row[-1] for row in formattedUserInput]
    
     listConstraints = []
+    
     #get constraint functions
     for i in range(len(formattedUserInput[0])-1):
         listConstraints.append([row[i] for row in formattedUserInput]) 
@@ -247,18 +250,17 @@ def drawGraph(formattedUserInput,slider=False):
     plt.ylim(0, bestY)
     plt.xlabel(r'$x$')
     plt.ylabel(r'$y$')
+ 
+    grid = fillingGrid(listConstraints,y)
 
-    filledArea = [] 
-
-    colorFeasibleRegion()
-
-    calculate = filledArea[0]
+    feasableArea = grid[0]
     
     #calculate feasable area
-    for i in range(1, len(filledArea)):
-        calculate = calculate & filledArea[i]
+    for i in range(1, len(grid)):
+        feasableArea = feasableArea & grid[i]
 
-    plt.imshow((calculate).astype(int), extent=(x.min(),x.max(),y.min(),y.max()), origin="lower", cmap="Greys", alpha=0.3)
+    #color the feasible area
+    plt.imshow(feasableArea.astype(int), extent=(x.min(),x.max(),y.min(),y.max()), origin="lower", cmap="Greys", alpha=0.3)
     
     #draw objectif function (move the graph to see it at (0,0))
     objectif = drawObjectif()
@@ -282,6 +284,12 @@ def drawGraph(formattedUserInput,slider=False):
         valmax = objectifCoeff[0] * bestX + objectifCoeff[1] * bestY
         DrawObjectifStaticly() 
     
+    #set event listener
     fig.canvas.mpl_connect("motion_notify_event", onIntersectionHover)
+    
     #open graph window
     plt.show()
+
+
+#exemple in case of testing 
+#drawGraph([[0,1,2,3],[1,0,3,2],[6,4,18,0],[-2,-2,-2,-2]],slider=True)
