@@ -20,7 +20,7 @@ class BigM(Simplex):
 
         return preconditioned_df
 
-    def __handle_negative_constraints(self, preconditioned_matrix: np.matrix) -> np.matrix:
+    def __handle_negative_constraints(self, preconditioned_matrix: np.array) -> np.array:
         # print("before modification")
         # print(preconditioned_matrix)
         # input()
@@ -38,7 +38,7 @@ class BigM(Simplex):
 
         return preconditioned_matrix
 
-    def __determine_coefs(self, preconditioned_matrix: np.matrix) -> list[str]:
+    def __determine_coefs(self, preconditioned_matrix: np.array) -> list[str]:
         coefs = []
         x = 0
         flag = True
@@ -61,7 +61,7 @@ class BigM(Simplex):
 
         return coefs
 
-    def __transform_equation(self, preconditioned_matrix: np.matrix) -> np.matrix:
+    def __transform_equation(self, preconditioned_matrix: np.array) -> np.array:
         # Multiply all the coefs of the equations by -1
         for i in range(0, preconditioned_matrix.shape[0]):
             preconditioned_matrix.itemset(
@@ -77,7 +77,7 @@ class BigM(Simplex):
 
         return preconditioned_matrix
 
-    def __preconditioner(self, formattedInput: np.matrix) -> pd.DataFrame:
+    def __preconditioner(self, formattedInput: np.array) -> pd.DataFrame:
         # Adding the artificial and slack variables to the formattedInput matrix
         artificial_variables = []
         slack_variables = []
@@ -253,7 +253,7 @@ class BigM(Simplex):
                 preconditioned_df.loc[row][column]
         return preconditioned_df
 
-    def runBigM(self, formattedInput: np.matrix) -> Iterations:
+    def runBigM(self, formattedInput: np.array) -> Iterations:
         """
         This function solves linear optimisation problems with the Big M method and returns each iteration
         in a seperate matrix.

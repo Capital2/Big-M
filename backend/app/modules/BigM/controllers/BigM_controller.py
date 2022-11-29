@@ -47,7 +47,7 @@ class BigMController():
 
     def perform_BigM(self, formatted_req_body):
         big_m = BigM()        
-        iterations = big_m.runBigM(np.matrix(formatted_req_body))
+        iterations = big_m.runBigM(np.array(formatted_req_body))
         return iterations
 
     def format_result(self, iterations: Iterations):
@@ -82,5 +82,5 @@ class BigMController():
         }
         
 
-
-BigM_controller = BigMController()
+if __name__ == '__main__':
+    BigM_controller = BigMController()
